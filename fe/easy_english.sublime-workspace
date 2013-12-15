@@ -1,0 +1,211 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "Packages/JSLint/JSLint.sublime-build",
+	"command_palette":
+	{
+		"height": 352.0,
+		"selected_items":
+		[
+			[
+				"packa",
+				"Package Control: Remove Package"
+			],
+			[
+				"Pa",
+				"Package Control: Install Package"
+			],
+			[
+				"JShi",
+				"JSHint"
+			],
+			[
+				"html5",
+				"Snippet: Simple HTML5 Boilerplate"
+			],
+			[
+				"Pac",
+				"Package Control: Install Package"
+			],
+			[
+				"pa",
+				"Package Control: List Packages"
+			],
+			[
+				"pack",
+				"Package Control: List Packages"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 156.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/yo/sublimeProjects/easy_english/Gruntfile.js",
+		"/home/yo/sublimeProjects/easy_english/package.json",
+		"/home/yo/dev/easy_english/fe/src/js/vendor/Backbone.js",
+		"/home/yo/dev/easy_english/fe/src/js/vendor/jQuery.js",
+		"/home/yo/sublimeProjects/easy_english/src/js/vendor/jQuery.js",
+		"/home/yo/sublimeProjects/easy_english/node_modules/grunt-contrib-jshint/node_modules/.bin/jshint",
+		"/home/yo/sublimeProjects/easy_english/src/js/vendor/Underscore.js",
+		"/home/yo/sublimeProjects/easy_english/src/js/vendor/Backbone.js",
+		"/home/yo/sublimeProjects/test1/projectFolder/js/main.js",
+		"/home/yo/Downloads/nodebob/app/css/main.css",
+		"/home/yo/Downloads/nodebob/app/js/app.js",
+		"/home/yo/Downloads/nodebob/app/js/modules/search.js",
+		"/home/yo/Downloads/nodebob/app/js/modules/request.js",
+		"/home/yo/Downloads/nodebob/app/js/modules/results.js",
+		"/home/yo/sublimeProjects/test1/untitled.sublime-project",
+		"/home/yo/sublimeProjects/test1/Gruntfile.js",
+		"/home/yo/sublimeProjects/test1/package.json",
+		"/home/yo/sublimeProjects/test1/Grunt",
+		"/home/yo/sublimeProjects/test1/projectFolder/index.html",
+		"/home/yo/.config/sublime-text-2/Packages/Default/Default (Linux).sublime-keymap",
+		"/home/yo/.config/sublime-text-2/Packages/User/Default (Linux).sublime-keymap",
+		"/home/yo/.config/sublime-text-2/Packages/Default/Preferences.sublime-settings",
+		"/home/yo/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+		"/home/yo/.config/sublime-text-2/Packages/Package Control/Package Control.sublime-settings"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"sa",
+			"esca",
+			"alt+p\n\n\n",
+			"package",
+			"packa\npac",
+			"packa\npacka",
+			"packa"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 201.0
+	},
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": false,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"js",
+				"node_modules/grunt-contrib-jshint/node_modules/.bin/jshint"
+			],
+			[
+				"gru",
+				"Grunt"
+			],
+			[
+				"",
+				"untitled"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 155.0,
+	"status_bar_visible": true
+}
