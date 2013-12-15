@@ -3,13 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/eng/index.php</file>
-            <file>file:/var/www/eng/protected/extensions/PHPPDO/CPdoDbConnection.php</file>
-            <file>file:/var/www/eng/protected/config/main.php</file>
-            <file>file:/var/www/eng/protected/views/site/login.php</file>
-            <file>file:/var/www/eng/framework/YiiBase.php</file>
-            <file>file:/var/www/eng/protected/views/site/test.php</file>
+            <file>file:/var/www/eng/protected/views/layouts/main1.php</file>
+            <file>file:/var/www/eng/framework/base/CModel.php</file>
+            <file>file:/var/www/eng/protected/views/mySite/register.php</file>
+            <file>file:/var/www/eng/protected/models/LoginForm1.php</file>
+            <file>file:/var/www/eng/protected/views/mySite/login.php</file>
             <file>file:/var/www/eng/protected/controllers/SiteController.php</file>
+            <file>file:/var/www/eng/protected/models/AuthForm.php</file>
+            <file>file:/var/www/eng/protected/controllers/MySiteController.php</file>
+            <file>file:/var/www/eng/protected/models/UserAuth.php</file>
+            <file>file:/var/www/eng/protected/config/main.php</file>
+            <file>file:/var/www/eng/protected/data/translation.sql</file>
+            <file>file:/var/www/eng/protected/views/site/login.php</file>
+            <file>file:/var/www/eng/protected/models/RegisterForm.php</file>
+            <file>file:/var/www/eng/protected/views/layouts/main.php</file>
+            <file>file:/var/www/eng/protected/data/phrase.sql</file>
         </group>
     </open-files>
 </project-private>

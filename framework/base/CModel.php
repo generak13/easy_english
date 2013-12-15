@@ -463,10 +463,10 @@ abstract class CModel extends CComponent implements IteratorAggregate, ArrayAcce
 	 */
 	public function setAttributes($values,$safeOnly=true)
 	{
-		if(!is_array($values))
+    if(!is_array($values))
 			return;
 		$attributes=array_flip($safeOnly ? $this->getSafeAttributeNames() : $this->attributeNames());
-		foreach($values as $name=>$value)
+    foreach($values as $name=>$value)
 		{
 			if(isset($attributes[$name]))
 				$this->$name=$value;
