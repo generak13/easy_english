@@ -3,10 +3,38 @@
 	{
 		"selected_items":
 		[
+			[
+				"opt",
+				"option	Tag"
+			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "src/create content.html",
+			"settings":
+			{
+				"buffer_size": 3217,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/less/styles.less",
+			"settings":
+			{
+				"buffer_size": 337,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/content view",
+			"settings":
+			{
+				"buffer_size": 5522,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "Packages/JSLint/JSLint.sublime-build",
 	"command_palette":
@@ -15,20 +43,36 @@
 		"selected_items":
 		[
 			[
-				"packa",
+				"Packa",
 				"Package Control: Remove Package"
 			],
 			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
 				"Pa",
+				"Package Control: Remove Package"
+			],
+			[
+				"html",
+				"Snippet: Simple HTML5 Boilerplate"
+			],
+			[
+				"html5",
+				"Set Syntax: HTML5"
+			],
+			[
+				"PAckage",
 				"Package Control: Install Package"
 			],
 			[
 				"JShi",
 				"JSHint"
-			],
-			[
-				"html5",
-				"Snippet: Simple HTML5 Boilerplate"
 			],
 			[
 				"Pac",
@@ -41,13 +85,9 @@
 			[
 				"pack",
 				"Package Control: List Packages"
-			],
-			[
-				"package",
-				"Package Control: Install Package"
 			]
 		],
-		"width": 449.0
+		"width": 575.0
 	},
 	"console":
 	{
@@ -64,6 +104,14 @@
 	},
 	"file_history":
 	[
+		"/home/yo/dev/easy_english/fe/src/ee-registration.html",
+		"/home/yo/dev/easy_english/fe/src/js/modules/models/exercisesModel.js",
+		"/home/yo/dev/easy_english/fe/src/js/modules/views/exercisesView.js",
+		"/home/yo/dev/easy_english/fe/src/ee-exercises.html",
+		"/home/yo/dev/easy_english/fe/Gruntfile.js",
+		"/home/yo/dev/easy_english/fe/src/less/styles.less",
+		"/home/yo/dev/easy_english/fe/src/js/vendor/require.js",
+		"/home/yo/dev/easy_english/fe/src/less/less/styles.less",
 		"/home/yo/sublimeProjects/easy_english/Gruntfile.js",
 		"/home/yo/sublimeProjects/easy_english/package.json",
 		"/home/yo/dev/easy_english/fe/src/js/vendor/Backbone.js",
@@ -95,7 +143,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 90.0,
+		"height": 0.0,
 		"where_history":
 		[
 		]
@@ -105,6 +153,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"glyphicon\n",
+			"<option></option>",
+			">\n",
+			"option",
+			">\n",
 			"sa",
 			"esca",
 			"alt+p\n\n\n",
@@ -129,8 +182,88 @@
 	"groups":
 	[
 		{
+			"selected": 2,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "src/create content.html",
+					"settings":
+					{
+						"buffer_size": 3217,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3217,
+								3217
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 720.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/less/styles.less",
+					"settings":
+					{
+						"buffer_size": 337,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								334,
+								334
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LESS/LESS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/content view",
+					"settings":
+					{
+						"buffer_size": 5522,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4995,
+								4995
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2298.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -168,6 +301,10 @@
 	"output.exec":
 	{
 		"height": 201.0
+	},
+	"output.git":
+	{
+		"height": 100.0
 	},
 	"replace":
 	{
