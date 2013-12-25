@@ -12,27 +12,19 @@
 	"buffers":
 	[
 		{
-			"file": "src/create content.html",
+			"file": "src/js/modules/models/exercisesModel.js",
 			"settings":
 			{
-				"buffer_size": 3217,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/less/styles.less",
-			"settings":
-			{
-				"buffer_size": 337,
+				"buffer_size": 129,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/content view",
+			"file": "src/js/modules/models/chooseAnsver.js",
 			"settings":
 			{
-				"buffer_size": 5522,
-				"line_ending": "Unix"
+				"buffer_size": 129,
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -91,7 +83,38 @@
 	},
 	"console":
 	{
-		"height": 156.0
+		"height": 156.0,
+		"history":
+		[
+			"git clone https://github.com/tanepiper/SublimeText-Nodejs \"%APPDATA%\\Sublime Text 2\\Packages\\Nodejs\"",
+			"`git clone https://github.com/tanepiper/SublimeText-Nodejs \"%APPDATA%\\Sublime Text 2\\Packages\\Nodejs\"`",
+			"git commit -m \"made little changes to tooltip. added nodejs files\"",
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())",
+			"nodejs index.js",
+			"node",
+			"nodejs",
+			"nodejs nodeHelloWorld.js",
+			"nodejs nodeHelloWorl",
+			"nodejs nodeHelloWorld",
+			"nodejs nodeHelloWorld.js",
+			"node nodeHelloWorld.js",
+			"console.log(\"Hello World\");",
+			"node nodeHelloWorld.js",
+			"showmenu",
+			"menu show",
+			"git status",
+			"git init",
+			"git branch master checkout",
+			"git ",
+			"git stat",
+			"git stats",
+			"git status",
+			"$git fetch upstream",
+			"git fetch upstream",
+			"close",
+			"exit",
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
 	},
 	"distraction_free":
 	{
@@ -104,6 +127,13 @@
 	},
 	"file_history":
 	[
+		"/D/workspace/easy_english/fe/easy_english.sublime-workspace",
+		"/D/workspace/easy_english/fe/easy_english.sublime-project",
+		"/D/workspace/easy_english/fe/Gruntfile.js",
+		"/D/workspace/easy_english/fe/package.json",
+		"/D/workspace/easy_english/fe/src/create content.html",
+		"/D/workspace/easy_english/fe/src/less/styles.less",
+		"/D/workspace/easy_english/fe/src/content view",
 		"/home/yo/dev/easy_english/fe/src/ee-registration.html",
 		"/home/yo/dev/easy_english/fe/src/js/modules/models/exercisesModel.js",
 		"/home/yo/dev/easy_english/fe/src/js/modules/views/exercisesView.js",
@@ -182,54 +212,73 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/create content.html",
+					"file": "src/js/modules/models/exercisesModel.js",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 3217,
+						"buffer_size": 129,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3217,
-								3217
+								0,
+								129
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/HTML/HTML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 720.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/less/styles.less",
-					"settings":
-					{
-						"buffer_size": 337,
-						"regions":
-						{
-						},
-						"selection":
-						[
+							"BracketHighlighterBusy": false,
+							"bh_regions":
 							[
-								334,
-								334
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/LESS/LESS.tmLanguage"
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -238,28 +287,176 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "src/content view",
+					"buffer": 1,
+					"file": "src/js/modules/models/chooseAnsver.js",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5522,
+						"buffer_size": 129,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4995,
-								4995
+								129,
+								129
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close"
+							],
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"sublime_auto_complete": true,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2298.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -306,6 +503,7 @@
 	{
 		"height": 100.0
 	},
+	"project": "easy_english.sublime-project",
 	"replace":
 	{
 		"height": 0.0
@@ -339,10 +537,24 @@
 		],
 		"width": 380.0
 	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"settings":
+	{
+	},
 	"show_minimap": true,
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
 	"side_bar_width": 155.0,
-	"status_bar_visible": true
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
 }
