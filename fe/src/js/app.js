@@ -1,3 +1,3 @@
-require(['$','router'], function($, router) {
+require(['jquery','router'], function($, router) {
 	router.initialize();
 });

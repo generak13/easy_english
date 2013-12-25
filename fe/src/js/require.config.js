@@ -1,7 +1,7 @@
 require.config({
 	baseUrl: "js/",
 	paths: {
-		"$": "vendor/jQuery",
+		"jquery": "vendor/jQuery",
 		'underscore': 'vendor/Underscore',
 		'bb': 'vendor/Backbone',
 		'handlebars': 'vendor/handlebars',
@@ -10,10 +10,10 @@ require.config({
 		'router': 'modules/router',
 
 		
-		'exercisesView': 'modules/models/exercisesView',
+		'ExercisesModel': 'modules/models/exercisesModel',
 
 
-		'exercisesView': 'modules/views/exercisesView',
+		'ExercisesView': 'modules/views/exercisesView',
 
 
 		'exercises-list-template': 'templates/exercises-list-template'

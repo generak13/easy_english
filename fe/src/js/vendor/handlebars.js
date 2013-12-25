@@ -2587,6 +2587,10 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
   Handlebars = create();
   Handlebars.create = create;
 
+  if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
+    define(function () { return Handlebars; } );
+  }
+
   __exports__ = Handlebars;
   return __exports__;
 })(__module1__, __module7__, __module8__, __module10__, __module11__);

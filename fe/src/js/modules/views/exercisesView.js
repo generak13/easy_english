@@ -1,4 +1,4 @@
-define(['$', 'underscore', 'bb', 'handlebars', 'exercises-list-template'], function ($, _, bb, handlebars, exercisesListTemplate) {
+define(['jquery', 'underscore', 'bb', 'handlebars', 'exercises-list-template'], function ($, _, bb, handlebars, exercisesListTemplate) {
 	
 	var ExercisesView = bb.View.extend({
 		el: '#exercises',
@@ -10,14 +10,14 @@ define(['$', 'underscore', 'bb', 'handlebars', 'exercises-list-template'], funct
 			this.render();
 		},
 
-		render: function() {debugger;
+		render: function() {
 			var template = handlebars.compile(exercisesListTemplate);
-			this.$el.html(temaplate(this.model));
+			this.$el.html(template(this.model.toJSON()));
 			return this;
 		},
 
 		chooseExercise: function(e) {
-
+			alert(this);
 		}
 	});
 
