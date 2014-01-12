@@ -89,3 +89,40 @@ textarea#content {
 	}
 	}
 }
+
+.dictionary-search-container {
+	position: relative;
+	z-index: 1;
+
+	.dictionary-search-results {
+		position: absolute;
+		background: #fff;
+		width: 90%;
+		display: block;
+		border: 1px solid #cccccc;
+		padding: 5px 0;
+	}
+
+	.dictionary-search-results-item {
+		padding: 0 10px;
+		margin-bottom: 5px;
+		cursor: pointer;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	.add-your-translation {
+		padding: 10px;
+	}
+
+	.your-translation {
+		display: none;
+		padding: 0 10px;
+		input[type='text'] {
+			margin-top: 5px;
+			widows: 100%;
+		}
+	}
+}

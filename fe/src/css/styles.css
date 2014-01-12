@@ -5571,3 +5571,34 @@ textarea#content {
   visibility: visible;
   text-align: center;
 }
+.dictionary-search-container {
+  position: relative;
+  z-index: 1;
+}
+.dictionary-search-container .dictionary-search-results {
+  position: absolute;
+  background: #fff;
+  width: 90%;
+  display: block;
+  border: 1px solid #cccccc;
+  padding: 5px 0;
+}
+.dictionary-search-container .dictionary-search-results-item {
+  padding: 0 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+.dictionary-search-container .dictionary-search-results-item:hover {
+  text-decoration: underline;
+}
+.dictionary-search-container .add-your-translation {
+  padding: 10px;
+}
+.dictionary-search-container .your-translation {
+  display: none;
+  padding: 0 10px;
+}
+.dictionary-search-container .your-translation input[type='text'] {
+  margin-top: 5px;
+  widows: 100%;
+}
