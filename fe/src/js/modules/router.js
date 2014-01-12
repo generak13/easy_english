@@ -2,28 +2,43 @@ define([
 	'jquery',
 	'underscore',
 	'bb',
+	'ExercisesModel',
+	'ChooseAnswerModel',
 	'ExercisesView',
-	'ExercisesModel'
-], function($, _, bb, ExercisesView, ExercisesModel) {
+	'ChooseAnswerView'
+], function($, _, bb, ExercisesModel, ChooseAnswerModel, ExercisesView, ChooseAnswerView) {
 	var Router = bb.Router.extend({
 		routes: {
 			'': 'doExList',
-			'/ex1': 'doEx1'
+			'ChooseAnswer_UA-EN': 'ChooseAnswer_UA-EN',
+			'ChooseAnswer_EN-UA': 'ChooseAnswer_EN-UA'
 		},
 		'doExList': function() {
 			var model = new ExercisesModel({
 						exercises: [
 								{
-									title: 'ex1',
-									type: 'ex1'
+									title: 'ChooseAnswer UA-EN',
+									type: 'ChooseAnswer_UA-EN'
 								},
 								{
-									title: 'ex2',
-									type: 'ex2'
+									title: 'ChooseAnswer EN-UA',
+									type: 'ChooseAnswer_EN-UA'
 								},
 								{
 									title: 'ex3',
 									type: 'ex3'
+								},
+								{
+									title: 'ex4',
+									type: 'ex4'
+								},
+								{
+									title: 'ex5',
+									type: 'ex5'
+								},
+								{
+									title: 'ex6',
+									type: 'ex6'
 								}
 
 							]
@@ -32,15 +47,21 @@ define([
 					model: model
 				}
 			);
+		},
+
+		'ChooseAnswer_UA-EN': function() {debugger;
+			var model = new ChooseAnswerModel();
+			var view = new ChooseAnswerView({
+					model: model
+				}
+			);
+		},
+
+		initialize: function() {
+			bb.history.start();
+			this.navigate('', {trigger: true});
 		}
 	});
 
-	var initialize = function() {
-		var router = new Router();
-		bb.history.start();
-		router.navigate('doExList');
-	}
-	return {
-		initialize: initialize,
-	}
+	return Router;
 });

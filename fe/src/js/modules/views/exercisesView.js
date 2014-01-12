@@ -3,7 +3,7 @@ define(['jquery', 'underscore', 'bb', 'handlebars', 'exercises-list-template'], 
 	var ExercisesView = bb.View.extend({
 		el: '#exercises',
 		events: {
-			'click div': 'chooseExercise'
+			'click .exercises': 'chooseExercise'
 		},
 		initialize: function () {
 			this.listenTo(this.model, 'change', this.render);
@@ -17,7 +17,7 @@ define(['jquery', 'underscore', 'bb', 'handlebars', 'exercises-list-template'], 
 		},
 
 		chooseExercise: function(e) {
-			alert(this);
+			appEx.router.navigate($(e.target).data()['exType'], {trigger: true});
 		}
 	});
 
