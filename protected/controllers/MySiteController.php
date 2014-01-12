@@ -2,6 +2,10 @@
 
 class MySiteController extends Controller
 {
+  
+  public static $default_username = 'root';
+  public static $default_password = 'monkey';
+  
 	/**
 	 * Declares class-based actions.
 	 */
@@ -126,7 +130,7 @@ class MySiteController extends Controller
           $this->render('register', array('model' => $model));
           Yii::app()->end();
         }
-        
+
         $user = new user();
         $user->email = $model->email;
         $user->login = $model->login;
