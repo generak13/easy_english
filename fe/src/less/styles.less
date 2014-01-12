@@ -1,4 +1,5 @@
 @import "bootstrap.less";
+@import "glyphicons.less";
 
 body {
 	padding-top: 100px;
@@ -32,4 +33,96 @@ textarea#content {
 .video iframe {
 	width: 440px;
 	height: 330px;
+}
+
+
+
+.content-nav  {
+	margin: 0;
+	padding: 0;
+	border-right: 1px solid lightgray;
+	border-radius: 10px;
+
+	li {
+		height: 100px;
+		display: block;
+		cursor: pointer;
+		padding: 20px;
+		margin-bottom: 10px;
+		text-align: center;
+	}
+}
+
+.content-search-result {
+
+	.content-search-item {
+		border-bottom: 1px solid lightgray;
+		.content-recent {
+			margin-top: 10px;
+			display: inline-block;
+		}
+	}
+}
+
+.dictionary-item {
+	.dictionary-item-delete {
+		font-size: 1.3em;
+		visibility: hidden;
+		& .glyphicon {
+			cursor: pointer;
+		}
+	}
+	.sound-icon {
+		display: inline-block;
+		font-size: 1.3em;
+		margin-right: 15px;
+		vertical-align: sub;
+		& .glyphicon {
+			cursor: pointer;
+		}
+		
+	}
+	&:hover {
+		.dictionary-item-delete {
+		visibility: visible;
+		text-align: center;
+	}
+	}
+}
+
+.dictionary-search-container {
+	position: relative;
+	z-index: 1;
+
+	.dictionary-search-results {
+		position: absolute;
+		background: #fff;
+		width: 90%;
+		display: block;
+		border: 1px solid #cccccc;
+		padding: 5px 0;
+	}
+
+	.dictionary-search-results-item {
+		padding: 0 10px;
+		margin-bottom: 5px;
+		cursor: pointer;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	.add-your-translation {
+		padding: 10px;
+	}
+
+	.your-translation {
+		display: none;
+		padding: 0 10px;
+		input[type='text'] {
+			margin-top: 5px;
+			widows: 100%;
+		}
+	}
 }

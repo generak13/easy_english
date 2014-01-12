@@ -2,7 +2,16 @@
 	"folders":
 	[
 		{
-			"path": "/home/yo/dev/easy_english/fe"
+			"follow_symlinks": true,
+			"path": "h:ome\\yo\\dev\\easy_english\\fe"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "node_modules"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "src"
 		}
 	]
 }

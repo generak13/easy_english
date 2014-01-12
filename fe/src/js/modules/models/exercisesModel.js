@@ -1,7 +1,9 @@
-define(['_', 'bb'], function ($,bb,_) {
+define(['underscore', 'bb'], function (_,bb) {
 	
-	var ExercisesModule = bb.extend({
-		exercises: [];
+	var ExercisesModule = bb.Model.extend({
+		defaults: {
+			exercises: []
+		}
 	});
 
 	return  ExercisesModule;
