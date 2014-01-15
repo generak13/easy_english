@@ -5,6 +5,6 @@ define(function() {
 	'<div class="question-image">' + 
 		'<img src="{{question.pictureLink}}">' + 
 	'</div>' + 
-	'{{#each answers}}<div class="answer" data-answer-id="{{id}}">{{phrase}}</div>{{/each}}' + 
-	'<button class="btn btn-primary forward">forward</button>';
+	'{{#each answers}}<div class="answer btn btn-default" data-answer-id="{{id}}">{{phrase}}</div>{{/each}}' + 
+	'<button class="forward btn btn-default">forward</button>';
 });

@@ -49,7 +49,7 @@ define([
 			);
 		},
 
-		'ChooseAnswer_UA-EN': function() {debugger;
+		'ChooseAnswer_UA-EN': function() {
 			var model = new ChooseAnswerModel();
 			var view = new ChooseAnswerView({
 					model: model
@@ -59,7 +59,6 @@ define([
 
 		initialize: function() {
 			bb.history.start();
-			this.navigate('', {trigger: true});
 		}
 	});
 

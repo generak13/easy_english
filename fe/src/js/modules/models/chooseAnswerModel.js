@@ -2,6 +2,7 @@ define(['underscore', 'bb'], function (_, bb) {
 	
 	var ChooseAnswerModule = bb.Model.extend({
 		defaults: {
+			type: 'ChooseAnswer_UA-EN',
 			questionCounter: 0,
 			questions: [
 				{
