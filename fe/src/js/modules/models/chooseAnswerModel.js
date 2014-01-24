@@ -288,8 +288,8 @@ define(['underscore', 'bb'], function (_, bb) {
 			]
 		},
 		checkAnswer: function (id) {
-			var questions = this.get('questions');
-				num = this.get('questionCounter')
+			var questions = this.get('questions'),
+				num = this.get('questionCounter');
 			if (id === questions[num].question.answerId) {
 				questions[num].question.correct = true;
 				return true;

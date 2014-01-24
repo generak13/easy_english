@@ -11,7 +11,8 @@ define([
 		routes: {
 			'': 'doExList',
 			'ChooseAnswer_UA-EN': 'ChooseAnswer_UA-EN',
-			'ChooseAnswer_EN-UA': 'ChooseAnswer_EN-UA'
+			'ChooseAnswer_EN-UA': 'ChooseAnswer_EN-UA',
+			'ex3': 'ex3'
 		},
 		'doExList': function() {
 			var model = new ExercisesModel({
@@ -50,12 +51,22 @@ define([
 		},
 
 		'ChooseAnswer_UA-EN': function() {
-			var model = new ChooseAnswerModel();
+			ChooseAnswer('ua_en');
+		},
+
+		'ChooseAnswer_EN-UA': function() {
+			ChooseAnswer('en_ua');
+		}
+
+		'ChooseAnswer': function(type) {
+			var model = new ChooseAnswerModel({
+				type: type
+			});
 			var view = new ChooseAnswerView({
 					model: model
 				}
 			);
-		},
+		}
 
 		initialize: function() {
 			bb.history.start();
