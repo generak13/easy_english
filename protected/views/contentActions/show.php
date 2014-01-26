@@ -23,9 +23,27 @@
             </div>
 					
 					</div>
-					<div class="col-md-2">
-						<span class="english-word">world</span> - <span class="translate">світ</span>
+					<div class="col-md-2 words_wrapper">
 					</div>
+  </div>
+</div>
+
+<div class="dictionary-search-results" style="display: none;background-color: green;">
+  <div class="dictionary-search-results-item">
+    sdfsdf
+  </div>
+  <div class="dictionary-search-results-item">
+    sdfsdf
+  </div>
+  <div class="dictionary-search-results-item">
+    sdfsdf
+  </div>
+  <div class="add-your-translation btn btn-link">
+    Add your translation
+  </div>
+  <div class="your-translation">
+    Your translation:
+    <input type="text" class="form-control" id="custom_translation" placeholder="your translation">
   </div>
 </div>
 

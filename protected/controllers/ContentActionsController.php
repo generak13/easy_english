@@ -58,18 +58,57 @@ class ContentActionsController extends Controller
       $model->attributes = $_POST['CreateContentForm'];
       
       if($model->validate()) {
-        $content = new content();
+        $content = new Content();
         $content->title = $model->title;
         $content->text = $model->text;
-        $content->type = $model->type;
+        
+        $type = Content::$TYPE_TEXT;
+        
+        switch ($model->type) {
+          case 'text':
+            $type = Content::$TYPE_TEXT;
+            break;
+          case 'video':
+            $type = Content::$TYPE_VIDEO;
+            break;
+          case 'audio':
+            $type = Content::$TYPE_AUDIO;
+            break;
+        }
+        
+        $content->type = $type;
         
         if($content->type == content::$TYPE_AUDIO || $content->type == content::$TYPE_VIDEO) {
           $content->player_link = $model->player_link;
         }
         
-        $content->genre = $model->genre;
-        $content->lvl = $model->lvl;
+        if($model->genre == 'genre-1') {
+          $content->genre = 1;
+        } else {
+          $content->genre = 2;
+        }
+        
+        $lvl = 1;
+        
+        switch ($model->lvl) {
+          case 'easy':
+            $lvl = 1;
+            break;
+          case 'medium':
+            $lvl = 2;
+            break;
+          case 'hard':
+            $lvl = 3;
+            break;
+        }
+        
+        $content->lvl = $lvl;
         $content->owner_id = Yii::app()->user->getId();
+        
+        $words = explode(' ', $content->text);
+        $pages = ceil(count($words)/Content::$WORDS_PER_PAGE);
+        
+        $content->pages = $pages;
         $content->save();
         $this->redirect(Yii::app()->user->returnUrl);
       }
@@ -79,7 +118,7 @@ class ContentActionsController extends Controller
   }
   
   public function actionShow($id) {
-    $content = content::model()->find('id=:id', array(':id' => $id));
+    $content = Content::model()->find('id=:id', array(':id' => $id));
 
     if($content) {
       $user2content = User2content::model()->find('user_id=:user_id AND content_id=:content_id', array(':user_id' => Yii::app()->user->getId(), ':content_id' => $id));
@@ -92,6 +131,20 @@ class ContentActionsController extends Controller
         $user2content->save();
       }
       
+      $groups_by_dot = explode("\n", $content->text);
+      
+      foreach ($groups_by_dot as $key => $value) {
+        $words = explode(' ', $value);
+        
+        foreach ($words as $index => $word) {
+          $words[$index] = '<tran>' . $word . '</tran>';
+        }
+        
+        $words = implode(" ", $words);
+        $groups_by_dot[$key] = '<context>' . $words . '</context>';
+      }
+      
+      $content->text = implode("\n", $groups_by_dot);
       $content->text = nl2br($content->text);
       $this->render('show', array('content' => $content, 'var1' => 'asd'));
     }
@@ -142,7 +195,7 @@ class ContentActionsController extends Controller
     }
     
     if(isset($_GET['content_status']) && $_GET['content_status'] == 'learned') {
-      $contents = content::model()->with(array(
+      $contents = Content::model()->with(array(
           'user2content' => array(
             'select' => false,
             'joinType' => 'INNER JOIN',
@@ -150,7 +203,7 @@ class ContentActionsController extends Controller
           )
         ))->findAll($condition, $params);
     } else if(isset($_GET['content_status']) && $_GET['content_status'] == 'learning') {
-      $contents = content::model()->with(array(
+      $contents = Content::model()->with(array(
           'user2content' => array(
             'select' => false,
             'joinType' => 'INNER JOIN',
@@ -158,13 +211,29 @@ class ContentActionsController extends Controller
           )
         ))->findAll($condition, $params);
     } else {
-      $contents = content::model()->findAll($condition, $params);
+      $contents = Content::model()->findAll($condition, $params);
     }
 
     $contents_count = count($contents);
     $grid = $this->renderPartial('contents_grid', array('models' => $contents, 'pages' => $contents_count/self::records_per_page), true);
     
     $response['content_table'] = $grid;
+    echo CJavaScript::jsonEncode($response);
+    return;
+  }
+  
+  public function actionGet_sentence_translation($text) {
+    $response = array('success' => false);
+    
+    $translation = MicrosoftTranslator::translate($text);
+    
+    if($translation) {
+      $response['success'] = true;
+      $response['data'] = $translation[0];
+    } else {
+      $response['msg'] = 'Some errors';
+    }
+    
     echo CJavaScript::jsonEncode($response);
     return;
   }

@@ -6,7 +6,7 @@ class DictionaryController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout='//layouts/main';
 
 	/**
 	 * @return array action filters
@@ -172,17 +172,35 @@ class DictionaryController extends Controller
 	}
   
   public function actionDictionary() {
-    $dictionary = Dictionary::model()->with('word', 'translation')->findAll();
+    $text = isset($_GET['text']) ? $_GET['text'] : null;
+    
+    if(gettype($text) != 'string' && !is_numeric($text)) {
+      $text = null;
+    }
+    
+    if($text) {
+      $dictionary = Dictionary::model()->with(array(
+          'word' => array(
+            'condition' => "word.text LIKE '%$text%'"
+          ), 
+          'translation'))->findAll('user_id=:user_id', array(':user_id' => Yii::app()->user->getId()));
+    } else {
+      $dictionary = Dictionary::model()->with('word', 'translation')->findAll("user_id=:user_id", array(':user_id' => Yii::app()->user->getId()));  
+    }
+    
     $result = $this->normalize_dictionary($dictionary);
         
     $dictionary_list = $this->renderPartial('dictionary_list', array('dictionary' => $result), true, true);
     
-    $this->render('dictionary', array('dictionary_list' => $dictionary_list));
+    $this->render('dictionary', array('dictionary_list' => $dictionary_list, 'text' => $text ? $text : ''));
   }
   
   //TODO: remove save(false)
-  public function actionAdd_word($word_to_add, $translation_for_word) {
+  public function actionAdd_word($word_to_add, $translation_for_word, $context = '', $content_id = null) {
     $response = array('success' => false);
+    
+    $content_id = is_numeric($content_id) ? (int)$content_id : null;
+    
     //check if current user already has this word
     $word = Dictionary::model()->with(array(
       'word' => array(
@@ -201,12 +219,12 @@ class DictionaryController extends Controller
     
     //check current word exists in global glossary
     if(!$word) {
-      $this->create_word_mp3($word_to_add);
-      return;
       $word = new Word();
       $word->text = $word_to_add;
       $word->audio = '';
       $word->save(false);
+      
+      $this->create_word_mp3($word_to_add);
       
       $translation = new Transation();
       $translation->word_id = $word->id;
@@ -227,7 +245,9 @@ class DictionaryController extends Controller
     $dictionary->word_id = $word->id;
     $dictionary->translation_id = $translation->id;
     $dictionary->user_id = Yii::app()->user->getId();
-    $dictionary->user_id = date('Y-m-d H:i:s');
+    $dictionary->context = $context;
+    $dictionary->content_id = $content_id;
+    $dictionary->added_datetime = date('Y-m-d H:i:s');
     $dictionary->save(false);
     
     $response['success'] = true;
@@ -321,6 +341,25 @@ class DictionaryController extends Controller
     Yii::app()->end();
   }
   
+  public function actionGet_learned_words_by_content($content_id) {
+    $response = array('success' => false);
+    
+    $dictionary = Dictionary::model()->with('word', 'translation')->findAll(
+        "user_id=:user_id AND content_id=:content_id",
+        array(
+          ':user_id' => Yii::app()->user->getId(),
+          ':content_id' => $content_id
+        )
+    );
+    $dictionary = $this->normalize_dictionary($dictionary);
+    
+    $response['success'] = true;
+    $response['data'] = $dictionary;
+    
+    echo CJavaScript::jsonEncode($response);
+    Yii::app()->end();
+  }
+  
   private function normalize_dictionary($dictionary) {
     $result = array();
     
@@ -358,8 +397,6 @@ class DictionaryController extends Controller
     if(!file_exists($audio_path . "/$text.mp3")) {
       $tts = new TextToSpeech($text);
       $result = $tts->saveToFile($audio_path . "/$text.mp3");
-      var_dump($result);
-      die();
     }
   }
 }

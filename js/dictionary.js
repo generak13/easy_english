@@ -38,11 +38,25 @@ function bindEvents() {
   
   $('#add_word').click(function(e) {
     if($('#word_search_textfield').val()) {
-      get_translations();
+      show_translation_suggestions();
     }
     
     e.preventDefault();
     return false;
+  });
+  
+  $('.add-your-translation').click(function() {
+    if($('.your-translation').is(':visible')) {
+      $('.your-translation').hide();
+    } else {
+      $('.your-translation').show();
+    }
+  });
+  
+  $('#custom_translation').keypress(function(e) {
+    if(e.keyCode == 13) {
+      add_word($('#word_search_textfield').val(), $(this).val());
+    }
   });
 }
 
@@ -64,7 +78,30 @@ function refresh_dictionary() {
   );
 }
 
-function get_translations() {
+/**
+ * add new word with translation
+ */
+function add_word(word, translation) {
+  var params = {};
+  params.word_to_add = word;
+  params.translation_for_word = translation;
+  
+  $.getJSON(
+    '/dictionary/add_word',
+    params,
+    function(response) {
+      if(response.success) {
+        alert('Success');
+        $('.dictionary-search-results').hide();
+        $('body').unbind('click');
+      } else {
+        alert('Falure');
+      }
+    }
+  );
+}
+
+function show_translation_suggestions() {
   var params = {};
   params.text = $('#word_search_textfield').val();
 
@@ -73,7 +110,28 @@ function get_translations() {
     params,
     function(response) {
       if(response.success) {
-        console.log(response.data);
+        var suggestions_block =  $('.dictionary-search-results');
+        $('.dictionary-search-results .dictionary-search-results-item').remove();
+        
+        for(var i = response.data.length - 1; i >= 0; i--) {
+          $('.dictionary-search-results').prepend('<div class="dictionary-search-results-item">' + response.data[i] + '</div>');
+        }
+        
+        $(suggestions_block).find('input').val('');
+        
+        $(suggestions_block).show();
+        
+        $('body').click(function(e) {
+          var selected_translation = $(e.target).closest('.dictionary-search-results-item');
+          
+          if(selected_translation.length != 0) {
+            add_word($('#word_search_textfield').val(), $(selected_translation).text());
+          } else if($(e.target).closest('.dictionary-search-results').length != 0) {
+          } else if($('.dictionary-search-results').is(':visible')) {
+            $('.dictionary-search-results').hide();
+            $('body').unbind('click');
+          }
+        });
       }
     }
   );
