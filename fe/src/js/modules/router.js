@@ -4,14 +4,20 @@ define([
 	'bb',
 	'ExercisesModel',
 	'ChooseAnswerModel',
+	'BuildWordModel',
+	'SoundToWordModel',
 	'ExercisesView',
-	'ChooseAnswerView'
-], function($, _, bb, ExercisesModel, ChooseAnswerModel, ExercisesView, ChooseAnswerView) {
+	'ChooseAnswerView',
+	'BuildWordView',
+	'SoundToWordView'
+], function($, _, bb, ExercisesModel, ChooseAnswerModel, BuildWordModel, SoundToWordModel, ExercisesView, ChooseAnswerView, BuildWordView, SoundToWordView) {
 	var Router = bb.Router.extend({
 		routes: {
 			'': 'doExList',
 			'ChooseAnswer_UA-EN': 'ChooseAnswer_UA-EN',
-			'ChooseAnswer_EN-UA': 'ChooseAnswer_EN-UA'
+			'ChooseAnswer_EN-UA': 'ChooseAnswer_EN-UA',
+			'BuildWord': 'BuildWord',
+			'SoundToWord': 'SoundToWord'
 		},
 		'doExList': function() {
 			var model = new ExercisesModel({
@@ -25,12 +31,12 @@ define([
 									type: 'ChooseAnswer_EN-UA'
 								},
 								{
-									title: 'ex3',
-									type: 'ex3'
+									title: 'BuildWord',
+									type: 'BuildWord'
 								},
 								{
-									title: 'ex4',
-									type: 'ex4'
+									title: 'SoundToWord',
+									type: 'SoundToWord'
 								},
 								{
 									title: 'ex5',
@@ -49,9 +55,39 @@ define([
 			);
 		},
 
-		'ChooseAnswer_UA-EN': function() {debugger;
-			var model = new ChooseAnswerModel();
+		'ChooseAnswer_UA-EN': function() {
+			this.ChooseAnswer('ChooseAnswer_UA-EN');
+		},
+
+		'ChooseAnswer_EN-UA': function() {
+			this.ChooseAnswer('ChooseAnswer_UA-EN');
+		},
+
+		'ChooseAnswer': function(type) {
+			var model = new ChooseAnswerModel({
+				type: type
+			});
 			var view = new ChooseAnswerView({
+					model: model
+				}
+			);
+		},
+
+		'BuildWord': function() {
+			var model = new BuildWordModel({
+				type: 'BuildWord'
+			});
+			var view = new BuildWordView({
+					model: model
+				}
+			);
+		},
+
+		'SoundToWord': function() {
+				var model = new SoundToWordModel({
+				type: 'SoundToWord'
+			});
+			var view = new SoundToWordView({
 					model: model
 				}
 			);
@@ -59,7 +95,6 @@ define([
 
 		initialize: function() {
 			bb.history.start();
-			this.navigate('', {trigger: true});
 		}
 	});
 

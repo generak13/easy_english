@@ -1,10 +1,12 @@
 define(function() {
 	return '' + 
-	'<div class="question">{{question.phrase}}</div>' + 
-	'<div class="question-voice"></div>' + 
-	'<div class="question-image">' + 
-		'<img src="{{question.pictureLink}}">' + 
-	'</div>' + 
-	'{{#each answers}}<div class="answer" data-answer-id="{{id}}">{{phrase}}</div>{{/each}}' + 
-	'<button class="btn btn-primary forward">forward</button>';
+	'{{#each questions}}' +
+		'{{#if question.correct}}' +
+			'<div>{{question.phrase}} - true</div>' +
+		'{{else}}' +
+			'<div>{{question.phrase}} - false</div>' +
+		'{{/if}}' +
+	'{{/each}}' +
+	'<button class="btn btn-primary repeat-exercise">Repeat</button>' +
+	'<button class="btn btn-primary close-exercise">Close</button>';
 });
