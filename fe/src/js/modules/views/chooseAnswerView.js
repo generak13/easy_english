@@ -253,13 +253,13 @@ define(['jquery', 'underscore', 'bb', 'handlebars', 'choose-answer-template', 'e
 		},
 
 		answerClickHandler: function(e) {
-			var $target = $(e.target);
-			var model = this.model.toJSON();
-			var id = $target.data()['answerId'];
-
 			if ($('.forward').hasClass('btn-primary')) {
 				return;
 			}
+			
+			var $target = $(e.target);
+			var model = this.model.toJSON();
+			var id = $target.data()['answerId'];
 
 			isCorrectAnswer = this.model.checkAnswer(id);
 
