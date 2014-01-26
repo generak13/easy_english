@@ -17,9 +17,14 @@ module.exports = function (grunt) {
     },
     less: {
       compile: {
-        files: {
-          "./src/css/styles.css": "./src/less/styles.less"
-        }
+        files: [
+          {
+            "./src/css/styles.css": "./src/less/styles.less"
+          },
+          {
+            "../../css/styles.css": "./src/less/styles.less"
+          }
+        ]
       }    
     },
     jshint: {
