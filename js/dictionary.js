@@ -1,3 +1,4 @@
+var current_page = 1;
 /**
  * bind events
  */
@@ -58,20 +59,35 @@ function bindEvents() {
       add_word($('#word_search_textfield').val(), $(this).val());
     }
   });
+  
+  $(document)
+	.on('click', '.pagination li', function() {
+	  if(!$(this).hasClass('disabled')) {
+		var page = current_page;
+		refresh_dictionary($(this).data('page'));
+	  }
+	  
+	  return false;
+  })
+	.on('click', 'div.dictionary-item-delete', function() {
+	  delete_dictionary_record($(this));
+  });
 }
 
 /**
  * refresh dictionary list
  */
-function refresh_dictionary() {
+function refresh_dictionary(page) {
   var params = {};
   params.text = $('#word_search_textfield').val();
+  params.page = page || 1;
 
   $.getJSON(
     "/dictionary/get_dictionary",
     params,
     function(response) {
       if(response.success) {
+        current_page = response.page;
         $('#dictionary_list').html(response.content);
       }
     }
@@ -91,11 +107,12 @@ function add_word(word, translation) {
     params,
     function(response) {
       if(response.success) {
-        alert('Success');
+        $.jnotify("Word was added to your dictionary");
+        
         $('.dictionary-search-results').hide();
         $('body').unbind('click');
       } else {
-        alert('Falure');
+        $.jnotify("Sorry, but some errors occured while adding word to your dictionary", "error");
       }
     }
   );
@@ -133,6 +150,26 @@ function show_translation_suggestions() {
           }
         });
       }
+    }
+  );
+}
+
+/**
+ * delete_dictionary_record
+ */
+function delete_dictionary_record(elem) {
+  var dictionary_record = $(elem).closest('div.dictionary-item').data('dictionary');
+  
+  $.getJSON(
+    '/dictionary/remove_from_dictionary',
+    {id: dictionary_record},
+    function(response) {
+        if(response.success) {
+            $.jnotify("Word was successfully removed!");
+            refresh_dictionary(current_page);
+        } else {
+            $.jnotify("Sorry, but some errors occured while removing word from your dictionary", "error");
+        }
     }
   );
 }

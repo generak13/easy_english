@@ -38,10 +38,10 @@ function bind_events() {
     }
     
     clearTimeout(timer);
-    $(current_context).css('background-color', '');
+    $(current_context).removeClass('highlight-context');
     
     if(current_word) {
-      $(current_word).css('background-color', '');
+      $(current_word).removeClass('highlight-tran');
     }
     
     current_context = null;
@@ -49,13 +49,13 @@ function bind_events() {
   });
   
   $('tran').mouseleave(function(e) {
-    $(e.target).css('background-color', '')
+    $(e.target).removeClass('highlight-tran');
     current_word = null;
   });
   
   $('tran').mouseover(function(e) {
     current_word = e.target;
-    $(current_word).css('background-color', 'gray');
+    $(current_word).addClass('highlight-tran');
   });
   
   //click on the word
@@ -104,13 +104,15 @@ function add_word(word, translation, context) {
     params,
     function(response) {
       if(response.success) {
-        alert('Success');
+        $.jnotify("Word was added to your dictionary");
+        
         $('.dictionary-search-results').hide();
         $('body').unbind('click');
 
         add_word_to_glossary_panel(params.word_to_add, params.translation_for_word);
+        highlight_words(params.word_to_add);
       } else {
-        alert('Falure');
+        $.jnotify("Sorry, but some errors occured while adding word to your dictionary", "error");
       }
     }
   );
@@ -204,6 +206,7 @@ function load_translation_context() {
   
   if($(context).data('translation')) {
     console.log('Translation: ' + $(context).data('translation'));
+    $('.sentense-translation').text($(context).data('translation'));
     highlight_context();
   } else {
     text = get_text(context);
@@ -244,6 +247,7 @@ function get_translation(text, source) {
       if(response.success) {
         $(source).data('translation', response.data);
         console.log('Translation: ' + response.data);
+        $('.sentense-translation').text(response.data);
       } else {
         console.log(response.msg);
       }
@@ -256,13 +260,13 @@ function get_translation(text, source) {
  */
 function highlight_context() {
   if(current_context) {
-    $(current_context).css('background-color', 'red')
+    $(current_context).addClass('highlight-context');
   }
 }
 
 function fadelight_context() {
   if(current_context) {
-    $(current_context).css('background-color', '')
+    $(current_context).removeClass('highlight-context');
   }
   
   current_context = null;
@@ -304,10 +308,9 @@ function load_learned_words() {
           var translations = get_normalized_translations(response.data[i].translations);
           
           var dictionary_record = '<div>' + 
-            '<div class="sound-icon" data-sound="' + response.data[i].sound + '">' +
-              '<span class="glyphicon glyphicon-play-circle">' +
-              '</span>' +
-            '</div>' +
+            '<span class="sound-icon" data-sound="' + response.data[i].sound + '">' +
+              '<span class="glyphicon glyphicon-play-circle"></span>' +
+            '</span>' +
             '<span class="english-word"><a target="_blank" href="/dictionary/dictionary?text=' + word + '">' + word + '</a>' +
             '</span> - <span class="translate">' + translations + '</span></div>';
 
@@ -323,9 +326,24 @@ function load_learned_words() {
           event.preventDefault();
           return false;
         });
+        
+        highlight_dictionary(response.data);
       }
     }
   );
+}
+
+function highlight_dictionary(data) {
+    for(var i = 0; i < data.length; i++) {
+        highlight_words(data[i].word);
+    }
+}
+
+/**
+ * hi
+ */
+function highlight_words(text) {
+    $('tran:contains("' + text + '")').addClass('in-dictionary');
 }
 
 function get_normalized_translations(translations) {

@@ -3,33 +3,32 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/eng/protected/models/TextToSpeech.php</file>
-            <file>file:/var/www/eng/protected/models/User2content.php</file>
-            <file>file:/var/www/eng/fe/src/css/styles.css</file>
+            <file>file:/var/www/eng/js/modules/views/buildWordView.js</file>
+            <file>file:/var/www/eng/protected/models/Exercise2dictionary.php</file>
             <file>file:/var/www/eng/protected/controllers/DictionaryController.php</file>
             <file>file:/var/www/eng/protected/views/dictionary/dictionary.php</file>
-            <file>file:/var/www/eng/protected/models/Transation.php</file>
-            <file>file:/var/www/eng/protected/views/contentActions/contents_grid.php</file>
             <file>file:/var/www/eng/protected/views/contentActions/index.php</file>
             <file>file:/var/www/eng/protected/controllers/MySiteController.php</file>
-            <file>file:/var/www/eng/protected/models/Content.php</file>
-            <file>file:/var/www/eng/css/styles.css</file>
+            <file>file:/var/www/eng/js/modules/models/exercisesModel.js</file>
             <file>file:/var/www/eng/protected/controllers/ContentActionsController.php</file>
-            <file>file:/var/www/eng/protected/config/main.php</file>
+            <file>file:/var/www/eng/protected/models/UserAuth.php</file>
             <file>file:/var/www/eng/js/dictionary.js</file>
-            <file>file:/var/www/eng/js/content.js</file>
+            <file>file:/var/www/eng/js/modules/views/soundToWordView.js</file>
+            <file>file:/var/www/eng/js/modules/models/soundToWordModel.js</file>
+            <file>file:/var/www/eng/protected/controllers/ExercisesController.php</file>
+            <file>file:/var/www/eng/js/modules/models/buildWordModel.js</file>
             <file>file:/var/www/eng/js/show_content.js</file>
-            <file>file:/var/www/eng/fe/src/ee-dictionary.html</file>
-            <file>file:/var/www/eng/protected/views/layouts/column2.php</file>
             <file>file:/var/www/eng/protected/views/dictionary/dictionary_list.php</file>
-            <file>file:/var/www/eng/protected/models/LoginForm1.php</file>
-            <file>file:/var/www/eng/protected/views/dictionary/index.php</file>
+            <file>file:/var/www/eng/protected/controllers/SiteController.php</file>
+            <file>file:/var/www/eng/protected/models/AuthForm.php</file>
             <file>file:/var/www/eng/protected/views/contentActions/show.php</file>
-            <file>file:/var/www/eng/protected/models/content.php</file>
-            <file>file:/var/www/eng/protected/models/Word.php</file>
+            <file>file:/var/www/eng/js/modules/models/chooseAnswerModel.js</file>
             <file>file:/var/www/eng/protected/models/Dictionary.php</file>
-            <file>file:/var/www/eng/protected/models/MicrosoftTranslator.php</file>
-            <file>file:/var/www/eng/protected/runtime/application.log</file>
+            <file>file:/var/www/eng/js/modules/views/chooseAnswerView.js</file>
+            <file>file:/var/www/eng/protected/models/user.php</file>
+            <file>file:/var/www/eng/protected/views/layouts/main.php</file>
+            <file>file:/var/www/eng/fe/src/less/styles.less</file>
+            <file>file:/var/www/eng/js/modules/views/exercisesView.js</file>
         </group>
     </open-files>
 </project-private>

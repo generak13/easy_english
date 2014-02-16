@@ -4,18 +4,20 @@
    */
 ?>
 
-<table>
+<table class="contents-list">
   <thead>
-    <tr>
-      <td><?= Yii::t('content', 'Title')?></td>
-      <td><?= Yii::t('content', 'Date')?></td>
+    <tr class="row contents-list-header" valign="middle">
+      <th class="col-md-9"><?= Yii::t('content', 'Title')?></th>
+      <th class="col-md-1"><?= Yii::t('content', 'Pages')?></th>
+      <th class="col-md-2"><?= Yii::t('content', 'Date')?></th>
     </tr>
   </thead>
   <tbody>
     <?php foreach ($models as $elem) {?>
-    <tr>
-      <td><a href="<?= $this->createUrl('contentActions/show', array('id' => $elem->id))?>"><?= $elem->title?></td>
-      <td><?= $elem->date?></td>
+    <tr class="row contents-list-item" valign="middle">
+      <td class="col-md-9 item-caption"><a href="<?= $this->createUrl('contentActions/show', array('id' => $elem->id))?>"><?= $elem->title?></td>
+      <td class="col-md-1 item-pages"><?= $elem->pages?></td>
+      <td class="col-md-2 item-data"><?= $elem->date?></td>
     </tr>
     <?php }?>
   </tbody>

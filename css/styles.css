@@ -261,7 +261,7 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.428571429;
-  color: #333333;
+  color: #4f4c4c;
   background-color: #ffffff;
 }
 input,
@@ -1623,7 +1623,7 @@ textarea.input-lg {
   display: block;
   margin-top: 5px;
   margin-bottom: 10px;
-  color: #737373;
+  color: #8f8b8b;
 }
 @media (min-width: 768px) {
   .form-inline .form-group {
@@ -4003,7 +4003,7 @@ a.thumbnail:focus {
 }
 .thumbnail .caption {
   padding: 9px;
-  color: #333333;
+  color: #4f4c4c;
 }
 .media,
 .media-body {
@@ -5488,8 +5488,18 @@ td.visible-print {
   content: "\e200";
 }
 body {
-  padding-top: 100px;
-  background-color: #f9db45;
+  background-color: #F8F8F8;
+}
+.navbar-header {
+  font-style: italic;
+  padding-left: 0;
+}
+.navbar-collapse {
+  padding: 0;
+}
+.navbar,
+.well {
+  background: #fff;
 }
 .all-width {
   width: 100%;
@@ -5527,22 +5537,29 @@ textarea#content {
   height: 200px;
 }
 .video iframe {
-  width: 440px;
-  height: 330px;
+  width: 100%;
+  height: 260px;
 }
 .content-nav {
-  margin: 0;
-  padding: 0;
+  margin: 0 0 0 -39px;
+  padding: 0 0 0 20px;
   border-right: 1px solid lightgray;
-  border-radius: 10px;
 }
 .content-nav li {
-  height: 100px;
+  height: 130px;
+  line-height: 130px;
   display: block;
   cursor: pointer;
-  padding: 20px;
-  margin-bottom: 10px;
   text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+.content-nav li.selected,
+.content-nav li:hover {
+  background: #f6f6f6;
 }
 .content-search-result .content-search-item {
   border-bottom: 1px solid lightgray;
@@ -5550,6 +5567,15 @@ textarea#content {
 .content-search-result .content-search-item .content-recent {
   margin-top: 10px;
   display: inline-block;
+}
+.dictionary-item {
+  font-size: 16px;
+  color: #4f4c4c;
+  padding: 5px 0;
+}
+.dictionary-item:hover {
+  background: #f6f6f6;
+  color: #000000;
 }
 .dictionary-item .dictionary-item-delete {
   font-size: 1.3em;
@@ -5575,23 +5601,24 @@ textarea#content {
   position: relative;
   z-index: 1;
 }
-.dictionary-search-container .dictionary-search-results {
+.dictionary-search-results {
   position: absolute;
   background: #fff;
-  width: 90%;
-  display: none;
+  width: auto;
+  display: block;
   border: 1px solid #cccccc;
   padding: 5px 0;
+  z-index: 1;
 }
-.dictionary-search-container .dictionary-search-results-item {
+.dictionary-search-results-item {
   padding: 0 10px;
   margin-bottom: 5px;
   cursor: pointer;
 }
-.dictionary-search-container .dictionary-search-results-item:hover {
+.dictionary-search-results-item:hover {
   text-decoration: underline;
 }
-.dictionary-search-container .add-your-translation {
+.add-your-translation {
   padding: 10px;
 }
 .your-translation {
@@ -5602,6 +5629,157 @@ textarea#content {
   margin-top: 5px;
   widows: 100%;
 }
+.your-translation input[type='text'] {
+  margin-top: 5px;
+  widows: 100%;
+}
 tran {
   cursor: pointer;
+}
+tran:hover {
+  color: #000000;
+}
+tran.in-dictionary {
+  background: lightgoldenrodyellow;
+}
+context.highlight-context {
+  background: #dedede;
+}
+.sound-icon {
+  margin-right: 5px;
+}
+.words_wrapper {
+  height: 400px;
+  overflow-y: auto;
+}
+.paginator {
+  margin: 15px 0;
+}
+#search-type:before,
+#search-type:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */
+}
+#search-type:after {
+  clear: both;
+}
+#search-type:before,
+#search-type:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */
+}
+#search-type:after {
+  clear: both;
+}
+#search-type div {
+  width: 25%;
+  height: 34px;
+  border: 1px solid transparent;
+  float: left;
+  line-height: 34px;
+  text-align: center;
+  box-sizing: border-box;
+  font-size: 20px;
+  cursor: pointer;
+}
+#search-type div.selected,
+#search-type div:hover {
+  background-color: #f6f6f6;
+}
+.logout-gravatar:hover ul {
+  display: block;
+}
+.logout-gravatar ul {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  display: none;
+  list-style: none;
+  padding: 0;
+  background: #fff;
+  min-width: 100px;
+  border: 1px solid #dedede;
+  z-index: 1;
+}
+.logout-gravatar ul li {
+  padding: 10px;
+  border-bottom: 1px solid #dedede;
+}
+.logout-gravatar ul li a {
+  display: block;
+  padding: 0;
+}
+.logout-gravatar ul li a:hover {
+  text-decoration: none;
+}
+.logout-gravatar ul li:last-child {
+  border-bottom: none;
+}
+.logout-gravatar ul li:hover {
+  background: #dedede;
+}
+.contents-list .contents-list-header {
+  font-size: 18px;
+}
+.contents-list .contents-list-item {
+  font-size: 20px;
+}
+.contents-list .contents-list-item td {
+  color: #4f4c4c;
+  padding: 5px 0;
+}
+.contents-list .contents-list-item:hover {
+  background: #f6f6f6;
+}
+.contents-list .contents-list-item:hover a,
+.contents-list .contents-list-item:hover td {
+  color: #000000;
+}
+.contents-list .item-caption a {
+  color: #4f4c4c;
+}
+.contents-list .item-caption a:hover {
+  text-decoration: none;
+}
+.contents-list .item-pages,
+.contents-list .item-date {
+  text-align: center;
+}
+#exercises {
+  padding: 10% 0;
+}
+#exercise-word-translation .answer {
+  display: block;
+  margin-bottom: 15px;
+}
+#exercise-word-translation .question {
+  font-size: 35px;
+  text-align: center;
+  margin-right: 15px;
+}
+#exercise-word-translation .question > .glyphicon {
+  font-size: 25px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+#exercise-word-translation .question-image {
+  text-align: center;
+}
+#exercise-word-translation .question-voice {
+  display: inline-block;
+  background: url(http://www.bris.ac.uk/engineering/schools/mven/venturersvoice/images/megaphone.gif);
+  width: 30px;
+  height: 30px;
+  background-size: cover;
+  cursor: pointer;
+}
+#exercise-word-translation .answers {
+  margin-bottom: 50px;
+}
+#exercise-word-translation .forward {
+  display: block;
 }

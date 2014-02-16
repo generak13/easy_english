@@ -22,7 +22,7 @@ module.exports = function (grunt) {
             "./src/css/styles.css": "./src/less/styles.less"
           },
           {
-            "../../css/styles.css": "./src/less/styles.less"
+            "../css/styles.css": "./src/less/styles.less"
           }
         ]
       }    

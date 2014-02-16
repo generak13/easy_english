@@ -146,7 +146,7 @@ class ContentActionsController extends Controller
       
       $content->text = implode("\n", $groups_by_dot);
       $content->text = nl2br($content->text);
-      $this->render('show', array('content' => $content, 'var1' => 'asd'));
+      $this->render('show', array('content' => $content, 'is_learned' => $user2content->status == 1));
     }
   }
   
@@ -172,46 +172,47 @@ class ContentActionsController extends Controller
   
   public function actionGet_contents() {
     $response = array('success' => true);
-    $condition = '';
-    $params = array();
-    
+    $criteria = new CDbCriteria();
+
     if(isset($_GET['title']) && $_GET['title']) {
       $title = addcslashes($_GET['title'], '%_');
-      $condition .= 'title LIKE :title';
-      $params[':title'] = "%$title%";
+      $criteria->addCondition('title LIKE ' . $title);
+    }
+    
+    if(isset($_GET['type']) && $_GET['type'] != 'all') {
+      $type = $this->getType($_GET['type']);
+
+      if($type) {
+        $criteria->addCondition('type = ' . $type);
+      }
     }
     
     if(isset($_GET['genre']) && $_GET['genre']) {
-      $condition .= empty($condition) ? '' : ' AND ';
-      $condition .= 'genre=:genre';
-      $params[':genre'] = (int)0;//$_GET['genre'];
+      $criteria->addInCondition('genre', $this->get_genre($_GET['genre']));
     }
     
-    if(isset($_GET['lvl']) && $_GET['lvl']) {
-      $condition .= empty($condition) ? '' : ' AND ';
-      $condition .= 'lvl=:lvl';
-      
-      $params[':lvl'] = $_GET['lvl'];
+    if(isset($_GET['lvl'])) {
+      $criteria->addInCondition('lvl', $this->get_lvl($_GET['lvl']));
     }
     
     if(isset($_GET['content_status']) && $_GET['content_status'] == 'learned') {
       $contents = Content::model()->with(array(
-          'user2content' => array(
+          'user2contents' => array(
             'select' => false,
             'joinType' => 'INNER JOIN',
-            'condition' => 'user2content.status=0'
+            'condition' => 'user2contents.status=0'
           )
-        ))->findAll($condition, $params);
+        ))->findAll($criteria);
     } else if(isset($_GET['content_status']) && $_GET['content_status'] == 'learning') {
       $contents = Content::model()->with(array(
-          'user2content' => array(
+          'user2contents' => array(
             'select' => false,
             'joinType' => 'INNER JOIN',
-            'condition' => 'user2content.status=1'
+            'condition' => 'user2contents.status=1'
           )
-        ))->findAll($condition, $params);
+        ))->findAll($criteria);
     } else {
-      $contents = Content::model()->findAll($condition, $params);
+      $contents = Content::model()->findAll($criteria);
     }
 
     $contents_count = count($contents);
@@ -236,6 +237,71 @@ class ContentActionsController extends Controller
     
     echo CJavaScript::jsonEncode($response);
     return;
+  }
+  
+  private function get_genre($genre_arr) {
+    $genre = array();
+    
+    foreach ($genre_arr as $elem) {
+      switch ($elem) {
+        case 'tourism': 
+          $genre[] = 0;
+          break;
+        case 'IT': 
+          $genre[] = 1;
+          break;
+        case 'rest': 
+          $genre[] = 2;
+          break;
+        default: 
+          $genre[] = 3;
+          break;
+      }
+    }
+    
+    return $genre;
+  }
+  
+  private function get_lvl($lvl_arr) {
+    $lvl = array();
+    
+    foreach ($lvl_arr as $elem) {
+      switch ($elem) {
+        case '0': 
+          $lvl[] = 0;
+          break;
+        case '1': 
+          $lvl[] = 1;
+          break;
+        case '2': 
+          $lvl[] = 2;
+          break;
+        default: 
+          $lvl[] = 0;
+          break;
+      }
+    }
+    
+    return $lvl;
+  }
+  
+  private function getType($input_type) {
+    switch ($input_type) {
+      case 'video':
+        $input_type = Content::$TYPE_VIDEO;
+        break;
+      case 'audio':
+        $input_type = Content::$TYPE_AUDIO;
+        break;
+      case 'text':
+        $input_type = Content::$TYPE_TEXT;
+        break;
+      default:
+        $input_type = 0;
+        break;
+    }
+    
+    return $input_type;
   }
   
 }

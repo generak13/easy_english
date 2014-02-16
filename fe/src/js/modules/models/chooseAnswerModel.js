@@ -2,7 +2,6 @@ define(['underscore', 'bb'], function (_, bb) {
 	
 	var ChooseAnswerModule = bb.Model.extend({
 		defaults: {
-			type: 'ChooseAnswer_UA-EN',
 			questionCounter: 0,
 			questions: [
 				{
@@ -13,7 +12,7 @@ define(['underscore', 'bb'], function (_, bb) {
 						voiceLink: '1',
 						answerId: 3,
 						correct: false
-					},
+          },
 					answers: [ 
 						{
 							id: 1,
@@ -295,6 +294,23 @@ define(['underscore', 'bb'], function (_, bb) {
 				return true;
 			}
 			return false;
+		},
+    
+    'fetch': function() {
+      var data;
+      
+			$.ajax({
+				url: '/exercises/GetWords',
+        async: false,
+        dataType: 'JSON',
+        data: {
+          type: this.type
+        },
+        type: "POST"
+			}).done(function(response) {
+        data = response;
+      });
+      return data;
 		}
 	});
 

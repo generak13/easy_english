@@ -2,6 +2,7 @@
 
 class DictionaryController extends Controller
 {
+  private static $wordsPerPage = 15;
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
@@ -178,19 +179,12 @@ class DictionaryController extends Controller
       $text = null;
     }
     
-    if($text) {
-      $dictionary = Dictionary::model()->with(array(
-          'word' => array(
-            'condition' => "word.text LIKE '%$text%'"
-          ), 
-          'translation'))->findAll('user_id=:user_id', array(':user_id' => Yii::app()->user->getId()));
-    } else {
-      $dictionary = Dictionary::model()->with('word', 'translation')->findAll("user_id=:user_id", array(':user_id' => Yii::app()->user->getId()));  
-    }
+    $total_count = Dictionary::getTotalRecords($text);
+    $dictionary = Dictionary::getRecords($text, 15);
     
-    $result = $this->normalize_dictionary($dictionary);
+    $dictionary = $this->normalize_dictionary($dictionary);
         
-    $dictionary_list = $this->renderPartial('dictionary_list', array('dictionary' => $result), true, true);
+    $dictionary_list = $this->renderPartial('dictionary_list', array('dictionary' => $dictionary, 'total' => $total_count, 'words_per_page' => self::$wordsPerPage, 'selected_page' => 1), true, true);
     
     $this->render('dictionary', array('dictionary_list' => $dictionary_list, 'text' => $text ? $text : ''));
   }
@@ -201,113 +195,63 @@ class DictionaryController extends Controller
     
     $content_id = is_numeric($content_id) ? (int)$content_id : null;
     
-    //check if current user already has this word
-    $word = Dictionary::model()->with(array(
-      'word' => array(
-        'select' => false,
-        'joinType' => 'INNER JOIN',
-        'condition' => 'word.text="'. $word_to_add . '"'
-    )))->find('user_id=:user_id', array(':user_id' => Yii::app()->user->getId()));
+    $record_created = Dictionary::addToDictionary($word_to_add, $translation_for_word, $context, $content_id);
     
-    if($word) {
-      $response['msg'] = 'Word is already exists';
-      echo CJavaScript::jsonEncode($response);
-      Yii::app()->end();
-    }
-    
-    $word = Word::model()->find('text=:text', array(':text' => $word_to_add));
-    
-    //check current word exists in global glossary
-    if(!$word) {
-      $word = new Word();
-      $word->text = $word_to_add;
-      $word->audio = '';
-      $word->save(false);
-      
-      $this->create_word_mp3($word_to_add);
-      
-      $translation = new Transation();
-      $translation->word_id = $word->id;
-      $translation->text = $translation_for_word;
-      $translation->save(false);
+    if($record_created) {
+      $response['success'] = true;  
     } else {
-      $translation = Transation::model()->find("word_id=:word_id AND text=:text", array(":word_id" => $word->id, ':text' => $translation_for_word));
-      
-      if(!$translation) {
-        $translation = new Transation();
-        $translation->word_id = $word->id;
-        $translation->text = $translation_for_word;
-        $translation->save(false);
-      }
+      $response['msg'] = 'Word is already in your dictionary';
     }
-    
-    $dictionary = new Dictionary();
-    $dictionary->word_id = $word->id;
-    $dictionary->translation_id = $translation->id;
-    $dictionary->user_id = Yii::app()->user->getId();
-    $dictionary->context = $context;
-    $dictionary->content_id = $content_id;
-    $dictionary->added_datetime = date('Y-m-d H:i:s');
-    $dictionary->save(false);
-    
-    $response['success'] = true;
 
     echo CJavaScript::jsonEncode($response);
     Yii::app()->end();
   }
-  
-  public function actionRemove_word($dictionary_id) {
-    Word::model()->deleteByPk($dictionary_id);
-  }
-  
-  public function actionEdit_word($dictionary_id, $new_word) {
-    $dictionary = Dictionary::model()->findByPk($dictionary_id);
-    
-    if(!$dictionary) {
-      echo '<pre>';
-      print_r('not exists');
-      die();
-    }
-    
-    $word = Word::model()->find("id=:id AND text=:text", array(':id' => $dictionary->word_id, ':text' => $new_word));
 
-    if(!$word) {
-      $word = new Word();
-      $word->text = $new_word;
-      $word->audio = '';
-    }
+  public function actionRemove_from_dictionary($id) {
+    Dictionary::model()->deleteByPk($id);
     
-    $word->text = $new_word;
-    $word->save(false);
+    $criteria = new CDbCriteria();
+    $criteria->condition = '`d`.`user_id` = :user_id AND `dictionary_id` = :dictionary_id';
+    $criteria->join = 'INNER JOIN `dictionary` d ON `d`.`id` = `dictionary_id`';
+    $criteria->params = array(':dictionary_id' => $id, ':user_id' => Yii::app()->user->getId());
     
-    $dictionary->word_id = $word->id;
-    $dictionary->save(false);
-    
-    echo '<pre>';
-    print_r('finish');
-    die();
+    Exercise2dictionary::model()->deleteAll($criteria);
+    echo CJavaScript::jsonEncode(array('success' => true));
+    Yii::app()->end();
   }
   
-  public function actionGet_dictionary($text) {
+  public function actionEdit_word($dictionary_id, $new_word, $translation) {
+    $response = array('success' => false);
+    
+    $is_edited = Dictionary::editDictionaryRecord($dictionary_id, $new_word, $translation);
+    
+    if($is_edited) {
+      $response['success'] = true;
+    } else {
+      $response['msg'] = 'Word cann\'t be found';
+    }
+    
+    echo CJavaScript::jsonEncode($response);
+    Yii::app()->end();
+  }
+  
+  public function actionGet_dictionary($text, $page) {
     $response = array('success' => false);
     
     try {
-      if($text) {
-        $dictionary = Dictionary::model()->with(array(
-          'word' => array(
-            'condition' => "word.text LIKE '%$text%'"
-          ), 
-          'translation'))->findAll('user_id=:user_id', array(':user_id' => Yii::app()->user->getId()));
-      } else {
-        $dictionary = Dictionary::model()->with('word', 'translation')->findAll('user_id=:user_id', array(':user_id' => Yii::app()->user->getId()));
-      }
-      
+      $total_count = Dictionary::getTotalRecords($text);
+      $dictionary = Dictionary::getRecords($text, self::$wordsPerPage, self::$wordsPerPage*($page-1));
+    
       $dictionary = $this->normalize_dictionary($dictionary);
       
+      if($page > ceil($total_count / self::$wordsPerPage)) {
+        $page = 1;
+      }
+      
       $response['success'] = true;
-      $response['content'] = $this->renderPartial('dictionary_list', array('dictionary' => $dictionary), true, true);
+      $response['content'] = $this->renderPartial('dictionary_list', array('dictionary' => $dictionary, 'total' => $total_count, 'words_per_page' => self::$wordsPerPage, 'selected_page' => $page), true, true);
+      $response['page'] = $page;
     }catch(Exception $e) {}
-    
     echo CJavaScript::jsonEncode($response);
     Yii::app()->end();
   }
@@ -315,7 +259,7 @@ class DictionaryController extends Controller
   public function actionGet_translations($text) {
     $response = array('success' => false);
     
-    $translations = Transation::model()->with(array(
+    $translation_objects = Transation::model()->with(array(
       'word' => array(
         'select' => false,
         'joinType' => "INNER JOIN",
@@ -326,6 +270,12 @@ class DictionaryController extends Controller
       'distinct' => true
     ));
     
+    $translations = array();
+    
+    foreach ($translation_objects as $obj) {
+      $translations[] = $obj->text;
+    }
+
     if(count($translations) < 5) {
       $mt = MicrosoftTranslator::translate($text);
       $total_translations = array_merge($translations, $mt);
@@ -373,6 +323,7 @@ class DictionaryController extends Controller
         }
       }else {
         $result[$elem->word->id] = array(
+          'dictionary_id' => $elem->id,
           'word' => $elem->word->text,
           'translations' => array($elem->translation->text),
           'contexts' => array($elem->context),
@@ -389,14 +340,5 @@ class DictionaryController extends Controller
   
   private function sort_dictionary($a, $b) {
     return $a['date'] < $b['date'];
-  }
-  
-  private function create_word_mp3($text) {
-    $audio_path = realpath("./audio");
-
-    if(!file_exists($audio_path . "/$text.mp3")) {
-      $tts = new TextToSpeech($text);
-      $result = $tts->saveToFile($audio_path . "/$text.mp3");
-    }
   }
 }

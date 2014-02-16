@@ -63,5 +63,7 @@
 </div>
 
 <?php
-Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl . '/js/create_content.js');
+  Yii::app()->clientScript->registerCoreScript('jquery');     
+  Yii::app()->clientScript->registerCoreScript('jquery.ui'); 
+  Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl . '/js/create_content.js');
 ?>

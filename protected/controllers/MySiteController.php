@@ -158,4 +158,12 @@ class MySiteController extends Controller
   public function actionTest() {
     $this->render('test');
   }
+  
+  public function actionSettings() {
+    $user = user::model()->find('id=' . Yii::app()->user->id);
+    echo '<pre>';
+    print_r($user);
+    die();
+    $this->render('settings');
+  }
 }

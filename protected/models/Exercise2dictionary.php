@@ -32,7 +32,7 @@ class Exercise2dictionary extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('dictionary_id, status, last_learned_date', 'required'),
+			array('dictionary_id, status', 'required'),
 			array('dictionary_id, exercise_id, status', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

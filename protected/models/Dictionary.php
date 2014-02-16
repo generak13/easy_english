@@ -37,7 +37,7 @@ class Dictionary extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, word_id, translation_id, context, added_datetime', 'required'),
+			array('user_id, word_id, translation_id, added_datetime', 'required'),
       array('content_id', 'numerical', 'integerOnly'=>true),
 			array('user_id, word_id, translation_id', 'length', 'max'=>10),
 			array('context', 'length', 'max'=>255),
@@ -119,4 +119,146 @@ class Dictionary extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+  
+  public static function addToDictionary($word_to_add, $translation_for_word, $context, $content_id) {
+    //check if current user already has this word
+    $dictionary = Dictionary::model()->with(array(
+      'word' => array(
+        'select' => false,
+        'joinType' => 'INNER JOIN',
+        'condition' => 'word.text="'. $word_to_add . '"'
+    )))->find('user_id=:user_id', array(':user_id' => Yii::app()->user->getId()));
+    
+    if($dictionary) {
+      return false;
+    }
+    
+    $word = Word::model()->find('text=:text', array(':text' => $word_to_add));
+    
+    //check current word exists in global glossary
+    if(!$word) {
+      $word = new Word();
+      $word->text = $word_to_add;
+      $word->audio = '/audio/' . $word_to_add . '.mp3';
+      $word->save();
+      
+      self::create_word_mp3($word_to_add);
+      
+      $translation = new Transation();
+      $translation->word_id = $word->id;
+      $translation->text = $translation_for_word;
+      $translation->save();
+    } else {
+      $translation = Transation::model()->find("word_id=:word_id AND text=:text", array(":word_id" => $word->id, ':text' => $translation_for_word));
+      
+      if(!$translation) {
+        $translation = new Transation();
+        $translation->word_id = $word->id;
+        $translation->text = $translation_for_word;
+        $translation->save();
+      }
+    }
+    
+    $dictionary = new Dictionary();
+    $dictionary->word_id = $word->id;
+    $dictionary->translation_id = $translation->id;
+    $dictionary->user_id = Yii::app()->user->getId();
+    $dictionary->context = $context;
+    $dictionary->content_id = $content_id;
+    $dictionary->added_datetime = date('Y-m-d H:i:s');
+    $dictionary->save();
+    
+    $exercises = Exercise::model()->findAll();
+    
+    foreach ($exercises as $exercise) {
+      $e2d = new Exercise2dictionary();
+      $e2d->exercise_id = $exercise->id;
+      $e2d->dictionary_id = $dictionary->id;
+      $e2d->status = 0;
+      $e2d->last_learned_date = NULL;
+      $e2d->save();
+    }
+    
+    return true;
+  }
+  
+  public static function editDictionaryRecord($dictionary_id, $new_word, $translation) {
+    $dictionary = Dictionary::model()->with('word', 'translation')->findByPk($dictionary_id);
+    
+    if(!$dictionary) {
+      return false;
+    }
+    
+    $word = Word::model()->find("id=:id AND text=:text", array(':id' => $dictionary->word_id, ':text' => $new_word));
+    $translation_id = $dictionary->translaton_id;
+
+    if(!$word) {
+      $word = new Word();
+      $word->text = $new_word;
+      $word->audio = '/audio/' . $new_word . '.mp3';
+      
+      self::create_word_mp3($new_word);
+      
+      if($dictionary->translation->text != $translation) {
+        $translation = new Transation();
+        $translation->word_id = $word->id;
+        $translation->text = $translation;
+        $translation->save();
+        
+        $translation_id = $translation->id;
+      }
+    }
+    
+    $word->text = $new_word;
+    $word->save();
+    
+    $dictionary->word_id = $word->id;
+    $dictionary->translation_id = $translation_id;
+    $dictionary->save();
+  }
+
+  public static function getTotalRecords($text) {
+    if(isset($text)) {
+      return Dictionary::model()->with(array(
+        'word' => array(
+          'condition' => "word.text LIKE '%$text%'"
+        )))->countByAttributes(array('user_id' => Yii::app()->user->getId()));
+    } else {
+      return Dictionary::model()->countByAttributes(array('user_id' => Yii::app()->user->getId()));
+    }
+  }
+  
+  public static function getRecords($text, $limit = null, $offset = null) {
+    $criteria = new CDbCriteria();
+    $criteria->addCondition('user_id=:user_id');
+    $criteria->params = array(':user_id' => Yii::app()->user->getId());
+    
+    if($limit) {
+      $criteria->limit = $limit;
+      $criteria->together = true;
+    }
+    
+    if($offset) {
+      $criteria->offset = $offset;
+    }
+    
+    if(isset($text)) {
+      return Dictionary::model()->with(array(
+        'word' => array(
+          'condition' => "word.text LIKE '%$text%'"
+        ), 
+        'translation'))->findAll($criteria);
+    } else {
+      return Dictionary::model()->with('word', 'translation')->findAll($criteria);
+    }
+  }
+
+  private static function create_word_mp3($text) {
+    $audio_path = realpath("./audio");
+
+    if(!file_exists($audio_path . "/$text.mp3")) {
+      $tts = new TextToSpeech($text);
+      $result = $tts->saveToFile($audio_path . "/$text.mp3");
+    }
+  }
 }

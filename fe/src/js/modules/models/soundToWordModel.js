@@ -26,7 +26,20 @@ define(['underscore', 'bb'], function (_, bb) {
 		},
 
 		'fetch': function () {
-
+      var data;
+      
+			$.ajax({
+				url: '/exercises/getExcerciseList',
+        async: false,
+        dataType: 'JSON',
+        data: {
+          type: this.type
+        },
+        type: "POST"
+			}).done(function(response) {
+        data = response;
+      });
+      return data;
 		}
 	});
 

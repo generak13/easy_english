@@ -19,6 +19,7 @@ class UserAuth implements IUserIdentity
 
   private $id;
   private $username;
+  private $email;
   private $password;
   
   public function __construct($username, $password) {
@@ -32,6 +33,7 @@ class UserAuth implements IUserIdentity
     if($user) {
       if($user->password == md5($this->password)) {
         $this->id = $user->id;
+        $this->email = $user->email;
         
         $this->errorCode = self::ERROR_NONE;
       } else {
@@ -46,6 +48,10 @@ class UserAuth implements IUserIdentity
 
   public function getId() {
     return $this->id;
+  }
+  
+  public function getEmail() {
+    return $this->email;
   }
 
   public function getIsAuthenticated() {
