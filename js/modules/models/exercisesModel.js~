@@ -1,0 +1,15 @@
+define(['underscore', 'bb'], function (_,bb) {
+	
+	var ExercisesModule = bb.Model.extend({
+		defaults: {
+			exercises: [],
+			type: 'list'
+		},
+		
+		'fetch': function() {
+//			$.ajax();
+		}
+	});
+
+	return  ExercisesModule;
+});
