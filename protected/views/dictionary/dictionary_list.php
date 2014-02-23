@@ -1,7 +1,7 @@
 <div class="dictionary-items">
 	<?php if (!count($dictionary)) { ?>
 		<div>
-			You dictionary is emty
+			<?=Yii::t('dictionary', 'Words are not found')?>
 		</div>
 	<?php } ?>
 	<?php foreach ($dictionary as $key => $elem) { ?>
@@ -28,7 +28,7 @@
 			$pagesCount = ceil($total / $words_per_page);
 		?>
 		<ul class="pagination">
-			<li <?= ($selected_page == 1) ? 'class="disabled"' : '' ?> data-page="1>"><a href="#">First</a></li>
+			<li <?= ($selected_page == 1) ? 'class="disabled"' : '' ?> data-page="1>"><a href="#"><?=Yii::t('dictionary', 'First')?></a></li>
 			<li <?= ($selected_page == 1) ? 'class="disabled"' : '' ?> data-page="<?= $selected_page - 1 ?>"><a href="#">&laquo;</a></li>
 
 			
@@ -37,7 +37,7 @@
 			<?php } ?>
 
 			<li <?= ($selected_page == $pagesCount) ? 'class="disabled"' : '' ?> data-page="<?= $selected_page + 1 ?>"><a href="#">&raquo;</a></li>
-			<li <?= ($selected_page == $pagesCount) ? 'class="disabled"' : '' ?> data-page="<?= $pagesCount ?>>"><a href="#">Last</a></li>
+			<li <?= ($selected_page == $pagesCount) ? 'class="disabled"' : '' ?> data-page="<?= $pagesCount ?>>"><a href="#"><?=Yii::t('dictionary', 'Last')?></a></li>
 		</ul>
 	<?php } ?>
 </div>

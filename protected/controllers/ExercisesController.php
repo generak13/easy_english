@@ -208,9 +208,16 @@ class ExercisesController extends Controller
     $type = $_POST['type'];
     $results = $_POST['results'];
     $mapping = array();
+		$points = 0;
+		$userId = 0;
     
     foreach ($results as $elem) {
-      $mapping[$elem['id']] = $elem['correct'];
+			$is_correct = filter_var($elem['correct'], FILTER_VALIDATE_BOOLEAN);
+      $mapping[$elem['id']] = $is_correct;
+			
+			if($is_correct) {
+				$points++;
+			}
     }
     
     $dictionaryIds = array();
@@ -246,7 +253,16 @@ class ExercisesController extends Controller
       
       $e2d->status = $status;
       $e2d->save();
+			
+			$userId = $e2d->dictionary->user_id;
     }
+		
+		if($userId) {
+			Statistics::saveUserStatisic($userId, $points);
+		}
+		
+		echo CJavaScript::jsonEncode(array('success' => true, 'user_id' => $userId));
+    Yii::app()->end();
 	}
 
 	// Uncomment the following methods and override them if needed

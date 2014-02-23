@@ -6,29 +6,29 @@
 <div class="content-filter row">
 	<form class="col-md-6">
 		<div class="form-group col-md-10">
-			<input id="search-title" type="text" class="form-control" placeholder="Search">
+			<input id="search-title" type="text" class="form-control" placeholder="<?=Yii::t('contents', 'Search')?>">
 		</div>
 		<button id="search-submit" type="submit" class="btn btn-default col-md-2">
-			Submit
+			<?=  Yii::t('contents', 'Find')?>
 		</button>
 	</form>
 	<div class="col-md-2">
 		<select id="search-genre" class="selectpicker form-control">
-			<option value="tourism"><?= Yii::t('content', 'Tousirm') ?></option>
-			<option value="IT"><?= Yii::t('content', 'IT') ?></option>
-			<option value="rest"><?= Yii::t('content', 'Rest') ?></option>
+			<option value="tourism"><?= Yii::t('contents', 'Tousirm') ?></option>
+			<option value="IT"><?= Yii::t('contents', 'IT') ?></option>
+			<option value="rest"><?= Yii::t('contents', 'Rest') ?></option>
 		</select>
 	</div>
 	<div class="col-md-2">
 		<select id="search-lvl">
-			<option value="0"><?= Yii::t('content', 'Easy') ?></option>
-			<option value="1"><?= Yii::t('content', 'Medium') ?></option>
-			<option value="2"><?= Yii::t('content', 'Hard') ?></option>
+			<option value="0"><?= Yii::t('contents', 'Easy') ?></option>
+			<option value="1"><?= Yii::t('contents', 'Medium') ?></option>
+			<option value="2"><?= Yii::t('contents', 'Hard') ?></option>
 		</select>
 	</div>
 	<div class="col-md-2">
 		<div id="search-type">
-			<div type="all" class="selected">All</div>
+			<div type="all" class="selected"><?=  Yii::t('contents', 'All')?></div>
 			<div type="video" class="glyphicon glyphicon-facetime-video"></div>
 			<div type="audio" class="glyphicon glyphicon-music"></div>
 			<div type="text" class="glyphicon glyphicon-book"></div>
@@ -41,28 +41,28 @@
 			<li data-content-status="all-content" class="selected">
 				<div>
 					<span>
-						All Content
+						<?=  Yii::t('contents', 'All Content')?>
 					</span>
 				</div>
 			</li>
 			<li data-content-status="learning">
 				<div>
 					<span>
-						Learning
+						<?=  Yii::t('contents', 'Learning')?>
 					</span>
 				</div>
 			</li>
 			<li data-content-status="learned">
 				<div>
 					<span>
-						Learned
+						<?=Yii::t('contents', 'Learned')?>
 					</span>
 				</div>
 			</li>
 			<li>
 				<div>
 					<a href="/contentActions/create">
-						Add Content
+						<?=  Yii::t('contents', 'Add Content')?>
 					</a>
 				</div>
 			</li>

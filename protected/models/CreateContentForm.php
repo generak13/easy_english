@@ -16,4 +16,16 @@ class CreateContentForm extends CFormModel
       array('player_link', 'safe')
 		);
 	}
+	
+	public function attributeLabels()
+	{
+		return array(
+			'title' => Yii::t('contents', 'Title'),
+			'type' => Yii::t('contents', 'Type'),
+			'genre' => Yii::t('contents', 'Genre'),
+			'text' => Yii::t('contents', 'Text'),
+			'lvl' => Yii::t('contents', 'Level'),
+			'player_link' => Yii::t('contents', 'Player Link'),
+		);
+	}
 }

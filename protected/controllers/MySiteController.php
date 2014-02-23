@@ -161,9 +161,61 @@ class MySiteController extends Controller
   
   public function actionSettings() {
     $user = user::model()->find('id=' . Yii::app()->user->id);
-    echo '<pre>';
-    print_r($user);
-    die();
-    $this->render('settings');
+
+    $this->render('settings', array('user' => $user));
   }
+	
+	public function actionSaveChanges($login, $email) {
+		$response = array('success' => true);
+		
+		if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$user = user::model()->find('id=' . Yii::app()->user->id);
+			$user->login = $login;
+			$user->email = $email;
+			$user->save();
+			
+			if($user->getErrors()) {
+				$response['success'] = false;
+			}
+		} else {
+			$response['success'] = false;
+			$response['msg'] = Yii::t('profile', 'Email is not valid');
+		}
+		
+		echo CJavaScript::jsonEncode($response);
+    Yii::app()->end();
+	}
+	
+	public function actionChangePassword($password) {
+		$response = array('success' => false);
+		
+		$user = user::model()->find('id=' . Yii::app()->user->id);
+		$user->password = md5($password);
+		$user->save();
+		
+		if(!$user->getErrors()) {
+			$response['success'] = true;
+		}
+		
+		echo CJavaScript::jsonEncode($response);
+    Yii::app()->end();
+	}
+	
+	public function actionGetWeekStatistics() {
+		$respose = array('success' => true);
+		
+		$userStats = Statistics::getUserWeekStatistics(Yii::app()->user->id);
+		$norma = 0;
+		
+		foreach ($userStats as &$elem) {
+			$elem['date'] = strftime('%b %d', strtotime($elem['date']));
+			$elem['norma_points'] = $norma;
+			$norma += 50;
+		}
+		
+		$respose['data'] = $userStats;
+		
+		echo CJavaScript::jsonEncode($respose);
+    Yii::app()->end();
+	}
 }

@@ -74,13 +74,13 @@ class Content extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'owner_id' => 'Owner',
-			'title' => 'Title',
-			'type' => 'Type',
-			'genre' => 'Genre',
-			'text' => 'Text',
-			'lvl' => 'Lvl',
+			'title' => Yii::t('contents', 'Title'),
+			'type' => Yii::t('contents', 'Type'),
+			'genre' => Yii::t('contents', 'Genre'),
+			'text' => Yii::t('contents', 'Text'),
+			'lvl' => Yii::t('contents', 'Level'),
 			'pages' => 'Pages',
-			'player_link' => 'Player Link',
+			'player_link' => Yii::t('contents', 'Player Link'),
 			'date' => 'Date',
 		);
 	}

@@ -8,7 +8,7 @@
     'method' => 'post'
     )); ?>
       <div class="well">
-        <h2>Create content</h2>
+        <h2><?=Yii::t('contents', 'Create content')?></h2>
         <div class="form-group row">
           <?php echo $form->labelEx($model, 'title', array('class' => 'col-lg-3 control-label'));?>
           <div class="col-lg-9">
@@ -18,7 +18,7 @@
         <div class="form-group row">
           <?php echo $form->labelEx($model, 'genre', array('class' => 'col-lg-3 control-label'));?>
           <div class="col-lg-9">
-            <?php echo $form->dropDownList($model, 'genre', array('genre-1' => 'Genre_1', 'genre-2' => 'Genre_2'), array('class' => 'col-lg-3 control-label form-control selectpicker'));?>
+            <?php echo $form->dropDownList($model, 'genre', array('genre-1' => Yii::t('contents', 'Tousirm'), 'genre-2' => Yii::t('contents', 'IT'), 'genre-3' => Yii::t('contents', 'Rest')), array('class' => 'col-lg-3 control-label form-control selectpicker'));?>
           </div>
         </div>
 
@@ -26,7 +26,7 @@
         <div class="form-group row">
           <?php echo $form->labelEx($model, 'type', array('class' => 'col-lg-3 control-label'));?>
           <div class="col-lg-9">
-            <?php echo $form->dropDownList($model, 'type', array('text' => 'Text', 'video' => 'Video', 'audio' => 'Audio'), array('class' => 'col-lg-3 control-label form-control selectpicker'));?>
+            <?php echo $form->dropDownList($model, 'type', array('text' => Yii::t('contents', 'Text'), 'video' => Yii::t('contents', 'Video'), 'audio' => Yii::t('contents', 'Audio')), array('class' => 'col-lg-3 control-label form-control selectpicker'));?>
           </div>
         </div>
 
@@ -40,7 +40,7 @@
         <div class="form-group row">
           <?php echo $form->labelEx($model, 'lvl', array('class' => 'col-lg-3 control-label'));?>
           <div class="col-lg-9">
-            <?php echo $form->dropDownList($model, 'lvl', array('easy' => 'Easy', 'medium' => 'Medium', 'hard' => 'Hard'), array('class' => 'col-lg-3 control-label form-control selectpicker'));?>
+            <?php echo $form->dropDownList($model, 'lvl', array('easy' => Yii::t('contents', 'Easy'), 'medium' => Yii::t('contents', 'Medium'), 'hard' => Yii::t('contents', 'Hard')), array('class' => 'col-lg-3 control-label form-control selectpicker'));?>
           </div>
         </div>
 
@@ -54,7 +54,7 @@
 
         <div class="form-group row">
           <div class="col-lg-offset-9 col-lg-3">
-            <button class="btn btn-primary btn-block" type="submit">Create</button>
+            <button class="btn btn-primary btn-block" type="submit"><?=  Yii::t('contents', 'Create')?></button>
           </div>
         </div>
       </div>

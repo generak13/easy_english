@@ -7,9 +7,9 @@
 <table class="contents-list">
   <thead>
     <tr class="row contents-list-header" valign="middle">
-      <th class="col-md-9"><?= Yii::t('content', 'Title')?></th>
-      <th class="col-md-1"><?= Yii::t('content', 'Pages')?></th>
-      <th class="col-md-2"><?= Yii::t('content', 'Date')?></th>
+      <th class="col-md-9"><?= Yii::t('contents', 'Title')?></th>
+      <th class="col-md-1"><?= Yii::t('contents', 'Pages')?></th>
+      <th class="col-md-2"><?= Yii::t('contents', 'Date')?></th>
     </tr>
   </thead>
   <tbody>

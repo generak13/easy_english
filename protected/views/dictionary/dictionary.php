@@ -2,20 +2,20 @@
   <div class="clearfix col-md-12">
     <div class="row">
       <div class="form-group col-md-offset-1 col-md-4 dictionary-search-container">
-        <input type="text" class="form-control" placeholder="Search" id="word_search_textfield" value="<?= $text ?>">
+        <input type="text" class="form-control" placeholder="<?=  Yii::t('dictionary', 'Search')?>" id="word_search_textfield" value="<?= $text ?>">
         <div class="dictionary-search-results" style="display: none;">
           <div class="add-your-translation btn btn-link">
-            Add your translation
+            <?=  Yii::t('addWordDialog', 'Add your translation')?>
           </div>
           <div class="your-translation" style="display: none;">
-            Your translation:
+            <?=  Yii::t('addWordDialog', 'Your translation:')?>
             <input type="text" class="form-control" id="custom_translation" placeholder="your translation">
           </div>
         </div>
       </div>
       <div class="btn-group col-md-2">
-        <button type="button" id="word_search_button" class="btn btn-default">Find</button>
-        <button type="button" id="add_word" class="btn btn-default">Add</button>
+        <button type="button" id="word_search_button" class="btn btn-default"><?=Yii::t('dictionary', 'Find')?></button>
+        <button type="button" id="add_word" class="btn btn-default"><?=  Yii::t('dictionary', 'Add')?></button>
       </div>
     </div>
 		<div id='dictionary_list'>

@@ -13,17 +13,17 @@
 		</div>
 		<div class="paginator clearfix">
 			<button type="button" class="btn btn-default paginator-prev">
-				<span class="glyphicon glyphicon-chevron-left"></span>prev
+				<span class="glyphicon glyphicon-chevron-left"></span><?=Yii::t('contents', 'prev')?>
 
 				<button type="button" class="btn btn-default paginator-next pull-right">
-					next<span class="glyphicon glyphicon-chevron-right"></span>
+					<?=  Yii::t('contents', 'next')?><span class="glyphicon glyphicon-chevron-right"></span>
 				</button>
 		</div>
 		<div>
 			<?php if ($is_learned) { ?>
-				<button id='set-learned' class='btn btn-primary all-width disabled'><?= Yii::t('show_content', 'I have leanred all unknown words') ?></button>
+				<button id='set-learned' class='btn btn-primary all-width disabled'><?= Yii::t('contents', 'I have leanred all unknown words') ?></button>
 			<?php } else { ?>
-				<button id='set-learned' class='btn btn-success all-width' ><?= Yii::t('show_content', 'I have leanred all unknown words') ?></button>
+				<button id='set-learned' class='btn btn-success all-width' ><?= Yii::t('contents', 'I have leanred all unknown words') ?></button>
 			<?php } ?>
 		</div>
 
@@ -36,10 +36,10 @@
 
 <div class="dictionary-search-results">
   <div class="add-your-translation btn btn-link">
-    Add your translation
+    <?=Yii::t('addWordDialog', 'Add your translation')?>
   </div>
   <div class="your-translation" style="display: none;">
-    Your translation:
+    <?=Yii::t('addWordDialog', 'Your translation:')?>
     <input type="text" class="form-control" id="custom_translation" placeholder="your translation">
   </div>
 </div>
