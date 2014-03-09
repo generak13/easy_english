@@ -11,6 +11,10 @@ class UserAuth implements IUserIdentity
 	const ERROR_LOGIN_OR_EMAIL_INVALID=1;
 	const ERROR_PASSWORD_INVALID=2;
 	const ERROR_UNKNOWN_IDENTITY=100;
+	
+	const USER_ADMINISTRATOR = 2;
+	const USER_MODERATOR = 1;
+	const USER_COMMON = 0;
   
   private $state = array();
   
@@ -34,7 +38,15 @@ class UserAuth implements IUserIdentity
       if($user->password == md5($this->password)) {
         $this->id = $user->id;
         $this->email = $user->email;
-        
+				
+        if($user->type == self::USER_ADMINISTRATOR) {
+					$this->setState('role', 'admin');
+				} else if($user->type == self::USER_MODERATOR) {
+					$this->setState('role', 'moderator');
+				} else {
+					$this->setState('role', 'user');
+				}
+				
         $this->errorCode = self::ERROR_NONE;
       } else {
         $this->errorCode = self::ERROR_PASSWORD_INVALID;

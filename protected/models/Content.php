@@ -25,8 +25,84 @@ class Content extends CActiveRecord
   public static $TYPE_TEXT = 1;
   public static $TYPE_VIDEO = 2;
   public static $TYPE_AUDIO = 3;
+	
+	public static $LVL_EASY = 1;
+	public static $LVL_MEDUIM = 2;
+	public static $LVL_HARD = 3;
   
   public static $WORDS_PER_PAGE = 300;
+	
+	private static function getTypeMapping() {
+		return array(
+			Content::$TYPE_TEXT => 'text',
+			Content::$TYPE_AUDIO => 'audio',
+			Content::$TYPE_VIDEO => 'video'
+		);
+	}
+	
+	private static function getLevelMapping() { 
+		return array(
+			Content::$LVL_EASY => 'easy',
+			Content::$LVL_MEDUIM => 'medium',
+			Content::$LVL_HARD => 'hard'
+		);
+	}
+	
+	public function getTypeByText($text) {
+		$type = Content::$TYPE_TEXT;
+        
+		switch ($text) {
+			case 'text':
+				$type = Content::$TYPE_TEXT;
+				break;
+			case 'video':
+				$type = Content::$TYPE_VIDEO;
+				break;
+			case 'audio':
+				$type = Content::$TYPE_AUDIO;
+				break;
+			}
+			
+		return $type;		
+	}
+	
+	public function getLevelByText($text) {
+		$lvl = self::$LVL_EASY;
+        
+		switch ($model->lvl) {
+			case 'easy':
+				$lvl = self::$LVL_EASY;
+				break;
+			case 'medium':
+				$lvl = self::$LVL_MEDUIM;
+				break;
+			case 'hard':
+				$lvl = self::$LVL_HARD;
+				break;
+		}
+		
+		return $lvl;
+	}
+	
+	public static function getTextType($type) {
+		$mapping = Content::getTypeMapping();
+		
+		if(isset($mapping[$type])) {
+			return $mapping[$type];
+		}
+		
+		return false;
+	}
+	
+	public static function getTextLevel($lvl) {
+		$mapping = Content::getLevelMapping();
+		
+		if(isset($mapping[$lvl])) {
+			return $mapping[$lvl];
+		}
+		
+		return false;
+	}
 	/**
 	 * @return string the associated database table name
 	 */

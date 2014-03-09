@@ -5783,3 +5783,70 @@ context.highlight-context {
 #exercise-word-translation .forward {
   display: block;
 }
+.translation-list-wrapper .show-all-checkbox {
+  margin: 5px 0;
+}
+.translation-list-wrapper .show-all-checkbox label + input[type='checkbox'] {
+  margin-left: 10px;
+}
+.translation-list-wrapper #translation-list .header {
+  font-weight: bold;
+  line-height: 28px;
+}
+.translation-list-wrapper #translation-list .body .edit-translation,
+.translation-list-wrapper #translation-list .body .remove-translation {
+  visibility: hidden;
+}
+.translation-list-wrapper #translation-list .body .row {
+  color: #4f4c4c;
+}
+.translation-list-wrapper #translation-list .body > .row:hover {
+  background: #f6f6f6;
+  color: #000000;
+}
+.translation-list-wrapper #translation-list .body > .row:hover .edit-translation,
+.translation-list-wrapper #translation-list .body > .row:hover .remove-translation {
+  visibility: visible;
+}
+#edit-dictionary-dialog .text {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: bold;
+  text-align: center;
+}
+#edit-dictionary-dialog .translation-image {
+  text-align: center;
+  margin: 10px 0;
+}
+#edit-dictionary-dialog .translation-image img {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+}
+#edit-dictionary-dialog .translations-list-item {
+  border: 1px solid #dedede;
+  border-radius: 50px;
+  text-align: center;
+  line-height: 26px;
+  margin-bottom: 5px;
+  cursor: default;
+  position: relative;
+}
+#edit-dictionary-dialog .context {
+  margin-bottom: 10px;
+}
+#edit-dictionary-dialog .remove {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  color: red;
+  display: none;
+  cursor: pointer;
+}
+#edit-dictionary-dialog .translations-list-item.selected,
+#edit-dictionary-dialog .translations-list-item:hover {
+  background: #f6f6f6;
+}
+#edit-dictionary-dialog .translations-list-item:hover .remove {
+  display: block;
+}

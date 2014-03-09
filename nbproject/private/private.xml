@@ -3,8 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/eng/protected/views/mySite/settings.php</file>
-            <file>file:/var/www/eng/protected/messages/uk/profile.php</file>
+            <file>file:/var/www/eng/protected/views/contentActions/ContentsList.php</file>
+            <file>file:/var/www/eng/protected/controllers/DictionaryController.php</file>
+            <file>file:/var/www/eng/js/translationsList.js</file>
+            <file>file:/var/www/eng/protected/views/dictionary/dictionary.php</file>
+            <file>file:/var/www/eng/js/dictionary.js</file>
+            <file>file:/var/www/eng/protected/views/dictionary/translation-list.php</file>
+            <file>file:/var/www/eng/js/contentsList.js</file>
+            <file>file:/var/www/eng/fe/src/less/styles.less</file>
         </group>
     </open-files>
 </project-private>

@@ -41,7 +41,8 @@ class ExercisesController extends Controller
       $question = array(
         'id' => $word->dictionary->id,
         'phrase' => $word->dictionary->word->text,
-        'pictureLink' => 'empty',
+        'pictureLink' => $word->dictionary->image_url,
+        'context' => $word->dictionary->context,
         'voiceLink' => '/audio/' . $word->dictionary->word->text . '.mp3',
         'answerId' => $word->dictionary->translation->id,
         'correct' => false

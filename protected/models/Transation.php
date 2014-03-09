@@ -99,4 +99,41 @@ class Transation extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	
+	public static function getTotalRecords($text = null, $OnlyNotVerified = false) {
+		$criteria = new CDbCriteria();
+		
+		if($text) {
+			$criteria->addSearchCondition('text', $text);
+		}
+		
+		if($OnlyNotVerified) {
+			$criteria->addCondition('`verified_date` IS NULL');
+		}
+		
+		return Transation::model()->count($criteria);
+	}
+	
+	public static function getRecords($text = null, $OnlyNotVerified = true, $limit = 15, $offset = null) {
+		$criteria = new CDbCriteria();
+		
+		if($text) {
+			$criteria->addSearchCondition('text', $text);
+		}
+		
+		if($OnlyNotVerified) {
+			$criteria->addCondition('`verified_date` IS NULL');
+		}
+		
+		if ($limit) {
+			$criteria->limit = $limit;
+			$criteria->together = true;
+		}
+
+		if ($offset) {
+			$criteria->offset = $offset;
+		}
+
+		return Transation::model()->findAll($criteria);
+	}
 }

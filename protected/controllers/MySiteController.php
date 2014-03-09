@@ -136,8 +136,9 @@ class MySiteController extends Controller
         $user->login = $model->login;
         $user->password = md5($model->password);
         $user->register = date("Y-m-d");
+        $user->type = user::USER_COMMON;
+				$user->api_key = md5(microtime() . $user->email);
         $user->save();
-        
         
         $this->redirect(Yii::app()->user->returnUrl);
       }

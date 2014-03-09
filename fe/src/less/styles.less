@@ -326,3 +326,92 @@ context.highlight-context {
 	  display: block;
   }
 }
+
+.translation-list-wrapper {
+  .show-all-checkbox {
+	margin: 5px 0;
+	
+	label + input[type='checkbox'] {
+	  margin-left: 10px;
+	}
+  }
+  
+  #translation-list {
+	.header {
+	  font-weight: bold;
+	  line-height: 28px;
+	}
+	
+	.body {
+	  .edit-translation,
+	  .remove-translation {
+		visibility: hidden;
+	  }
+	  .row {
+		color: @text-color;
+	  }	  
+	  &>.row:hover {
+		background: #f6f6f6;
+		color: @text-color-hovered;
+		
+		.edit-translation,
+		.remove-translation {
+		  visibility: visible;
+		}
+	  }
+	}	
+  }
+}
+
+#edit-dictionary-dialog {
+  
+  .text {
+	font-size: 18px;
+	line-height: 28px;
+	font-weight: bold;
+	text-align: center;
+  }
+  
+  .translation-image {
+	text-align: center;
+	margin: 10px 0;
+  }
+  
+  .translation-image img {
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+  }
+  
+  .translations-list-item {
+	  border: 1px solid #dedede;
+	  border-radius: 50px;
+	  text-align: center;
+	  line-height: 26px;
+	  margin-bottom: 5px;
+	  cursor: default;
+	  position: relative;
+  }
+  
+  .context {
+	margin-bottom: 10px;
+  }
+  
+  .remove {
+	position: absolute;
+	right: 10px;
+	top: 0;
+	color: red;
+	display: none;
+	cursor: pointer;
+  }
+  
+  .translations-list-item.selected,
+  .translations-list-item:hover {
+    background: #f6f6f6;
+  }
+  
+  .translations-list-item:hover .remove {
+	display: block;
+  }
+}

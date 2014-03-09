@@ -18,7 +18,7 @@
         <div class="form-group row">
           <?php echo $form->labelEx($model, 'genre', array('class' => 'col-lg-3 control-label'));?>
           <div class="col-lg-9">
-            <?php echo $form->dropDownList($model, 'genre', array('genre-1' => Yii::t('contents', 'Tousirm'), 'genre-2' => Yii::t('contents', 'IT'), 'genre-3' => Yii::t('contents', 'Rest')), array('class' => 'col-lg-3 control-label form-control selectpicker'));?>
+            <?php echo $form->dropDownList($model, 'genre', array('tourism' => Yii::t('contents', 'Tousirm'), 'it' => Yii::t('contents', 'IT'), 'rest' => Yii::t('contents', 'Rest')), array('class' => 'col-lg-3 control-label form-control selectpicker'));?>
           </div>
         </div>
 

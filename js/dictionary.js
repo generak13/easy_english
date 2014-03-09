@@ -69,8 +69,11 @@ function bindEvents() {
 	  
 	  return false;
   })
-	.on('click', 'div.dictionary-item-delete', function() {
+	.on('click', 'span.dictionary-item-delete', function() {
 	  delete_dictionary_record($(this));
+  })
+	.on('click', 'span.dictionary-item-edit', function() {
+	  EditDictionaryItem($(this));
   });
 }
 
@@ -172,6 +175,129 @@ function delete_dictionary_record(elem) {
         }
     }
   );
+}
+
+function EditDictionaryItem(elem) {
+  var id = $(elem).closest('div.dictionary-item').find('.dictionary-item-phrase').data('word');
+  var editData = null;
+
+  $.ajax({
+	url: '/dictionary/loadWordData',
+	type: 'GET',
+	dataType: 'json',
+	data: {
+	  id: id
+	}
+  }).done(function (data, status) {
+	editData = data;
+	onSuccess();
+  });
+  
+  function onSuccess () {
+	editData.selected = editData.data[0].translation_id;
+	renderDialogData();
+	initDialog();
+	initDialogBindings();
+  }
+  
+  function initDialogBindings() {
+	$('#edit-dictionary-dialog')
+	  .on('hide.bs.modal', removeDialogBindings)
+	  .on('blur', '.change-image', function() {
+		if ($(this).val()) {
+		  $('.translation-image img', '#edit-dictionary-dialog').attr('src', $(this).val());
+		}
+		return false;
+	})
+	  .on('blur', '.change-context', function() {
+		if ($(this).val()) {
+		  $('.context', '#edit-dictionary-dialog').text($(this).val());
+		}
+		return false;
+	})
+	  .on('click', '.translations-list-item', function() {
+		editData.selected = '' + $(this).data()['id'];
+		renderDialogData();
+	})
+	  .on('click', '.save', function() {
+		var selectedItem = getSelectedDataItem(editData.selected),
+			image_url = $('.change-image', '#edit-dictionary-dialog').val() || selectedItem.image_url,
+			context = $('.change-context', '#edit-dictionary-dialog').val() || selectedItem.context;
+		$.ajax({
+		  url: '/dictionary/saveDictionaryTranslation',
+		  type: 'GET',
+		  data: {
+			dictionary_id: selectedItem.dictionary_id,
+			image_url: image_url,
+			context: context
+		  }
+		  
+		}).done(function () {
+		  $.extend(selectedItem, {
+			image_url: image_url,
+			context: context
+		  });
+		});
+	})
+	  .on('click', '.remove', function() {debugger;
+		var id = $(this).parent().data()[id];
+		var selectedItem = getSelectedDataItem(id);
+		if (editData.data.lenght > 1) {
+		  $.ajax({
+			url: '/dictionary/deleteDictionaryTranslation',
+			type: 'GET',
+			data: {
+			  id: selectedItem.dictionary_id
+			}
+		  }).done(function() {
+			editData.data.slice(editData.data.indexOf(selectedItem), 1);
+			renderDialogData();
+			$.jnotify("Translation was deleted");
+		  });
+		} else {
+		  $.jnotify("You cannot remove last translation in such way", "warning");
+		}
+	  });
+  }
+  
+  function getSelectedDataItem(id) {
+	for(var i = editData.data.length - 1; i >= 0; i--) {
+	  if (editData.data[i].translation_id == id) {
+		return editData.data[i];
+	  }
+	}
+  }
+  
+  function removeDialogBindings() {
+	$('#edit-dictionary-dialog')
+	  .off('hide.bs.modal')
+	  .off('blur', '.change-image')
+	  .off('blur', '.change-context')
+	  .off('click', '.translations-list-item')
+	  .off('click', '.save')
+	  .off('click', '.remove');
+  }
+  
+  function renderDialogData() {
+	var source   = $("#edit-dictionary-template").html();
+	var template = Handlebars.compile(source);
+	$('#edit-dictionary-dialog .modal-body').html(template(editData));
+  }
+  
+  function initDialog() {
+	$('#edit-dictionary-dialog').modal();
+  }
+  
+  Handlebars.registerHelper('ifEqual', function(v1, v2, options) {
+	if(v1 === v2) {
+	  return options.fn(this);
+	}
+	return options.inverse(this);
+  });
+}
+
+function saveEditedDictionaryRecord() {
+  
 }
 
 $(document).ready(function() {

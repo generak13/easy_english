@@ -10,6 +10,7 @@
  * @property string $translation_id
  *  * @property integer $content_id
  * @property string $context
+ * @property string $image_url
  * @property int $context_id
  * @property string $added_datetime
  *
@@ -74,6 +75,7 @@ class Dictionary extends CActiveRecord
 			'translation_id' => 'Translation',
       'content_id' => 'Content',
 			'context' => 'Context',
+			'image_url' => 'Image Url',
 			'added_datetime' => 'Added Datetime',
 		);
 	}
@@ -134,6 +136,7 @@ class Dictionary extends CActiveRecord
     }
     
     $word = Word::model()->find('text=:text', array(':text' => $word_to_add));
+		$image_url = TextToImage::getImageUrlByText($word_to_add);
     
     //check current word exists in global glossary
     if(!$word) {
@@ -164,6 +167,7 @@ class Dictionary extends CActiveRecord
     $dictionary->translation_id = $translation->id;
     $dictionary->user_id = Yii::app()->user->getId();
     $dictionary->context = $context;
+    $dictionary->image_url = $image_url ? $image_url : NULL;
     $dictionary->content_id = $content_id;
     $dictionary->added_datetime = date('Y-m-d H:i:s');
     $dictionary->save();

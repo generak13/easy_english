@@ -9,7 +9,19 @@ class ContentActionsController extends Controller
   public function rules() {
     
   }
-  
+	
+	public function accessRules()
+	{   
+		return array(
+				array('allow',
+						'actions'=>array('admin'),
+						'roles'=>array('staff', 'devel'),
+				),
+				array('deny',  // deny all users
+						'users'=>array('*'),
+				),
+		);
+	}
 
   /**
 	 * This is the default 'index' action that is invoked
@@ -62,21 +74,7 @@ class ContentActionsController extends Controller
         $content->title = $model->title;
         $content->text = $model->text;
         
-        $type = Content::$TYPE_TEXT;
-        
-        switch ($model->type) {
-          case 'text':
-            $type = Content::$TYPE_TEXT;
-            break;
-          case 'video':
-            $type = Content::$TYPE_VIDEO;
-            break;
-          case 'audio':
-            $type = Content::$TYPE_AUDIO;
-            break;
-        }
-        
-        $content->type = $type;
+        $content->type = $content->getTypeByText($model->type);
         
         if($content->type == content::$TYPE_AUDIO || $content->type == content::$TYPE_VIDEO) {
           $content->player_link = $model->player_link;
@@ -88,21 +86,7 @@ class ContentActionsController extends Controller
           $content->genre = 2;
         }
         
-        $lvl = 1;
-        
-        switch ($model->lvl) {
-          case 'easy':
-            $lvl = 1;
-            break;
-          case 'medium':
-            $lvl = 2;
-            break;
-          case 'hard':
-            $lvl = 3;
-            break;
-        }
-        
-        $content->lvl = $lvl;
+        $content->lvl = $content->getLevelByText($model->lvl);
         $content->owner_id = Yii::app()->user->getId();
         
         $words = explode(' ', $content->text);
@@ -238,6 +222,10 @@ class ContentActionsController extends Controller
     echo CJavaScript::jsonEncode($response);
     return;
   }
+	
+	public function actionContentsList() {
+		
+	}
   
   private function get_genre($genre_arr) {
     $genre = array();

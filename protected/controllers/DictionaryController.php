@@ -183,8 +183,9 @@ class DictionaryController extends Controller
     $dictionary = Dictionary::getRecords($text, 15);
     
     $dictionary = $this->normalize_dictionary($dictionary);
+		$pagination = $this->renderPartial('//shared/pagination', array('recordsCount' => count($dictionary), 'total' => $total_count, 'selectedPage' => 1, 'recordsPerPage' => self::$wordsPerPage), true, true);
         
-    $dictionary_list = $this->renderPartial('dictionary_list', array('dictionary' => $dictionary, 'total' => $total_count, 'words_per_page' => self::$wordsPerPage, 'selected_page' => 1), true, true);
+    $dictionary_list = $this->renderPartial('dictionary_list', array('dictionary' => $dictionary, 'pagination' => $pagination), true, true);
     
     $this->render('dictionary', array('dictionary_list' => $dictionary_list, 'text' => $text ? $text : ''));
   }
@@ -247,9 +248,11 @@ class DictionaryController extends Controller
       if($page > ceil($total_count / self::$wordsPerPage)) {
         $page = 1;
       }
+			
+			$pagination = $this->renderPartial('//shared/pagination', array('recordsCount' => count($dictionary), 'total' => $total_count, 'selectedPage' => $page, 'recordsPerPage' => self::$wordsPerPage), true, true);
       
       $response['success'] = true;
-      $response['content'] = $this->renderPartial('dictionary_list', array('dictionary' => $dictionary, 'total' => $total_count, 'words_per_page' => self::$wordsPerPage, 'selected_page' => $page), true, true);
+      $response['content'] = $this->renderPartial('dictionary_list', array('dictionary' => $dictionary, 'pagination' => $pagination), true, true);
       $response['page'] = $page;
     }catch(Exception $e) {}
     echo CJavaScript::jsonEncode($response);
@@ -309,8 +312,209 @@ class DictionaryController extends Controller
     echo CJavaScript::jsonEncode($response);
     Yii::app()->end();
   }
-  
-  private function normalize_dictionary($dictionary) {
+	
+	public function actionTranslationsList() {
+		$criteria = new CDbCriteria();
+		$criteria->addCondition('`verified_date` IS NULL');
+		
+		$total = Transation::getTotalRecords(null, true);
+		$translations = Transation::getRecords();
+		
+		$pagination = $this->renderPartial('//shared/pagination', array('recordsCount' => count($translations), 'total' => $total, 'selectedPage' => 1, 'recordsPerPage' => self::$wordsPerPage), true, true);
+		$translationsTable = $this->renderPartial('translation-list', array('translations' => $translations, 'pagination' => $pagination), true, true);
+		
+		$this->render('translationsList', array('translationsTable' => $translationsTable));
+	}
+	
+	public function actionGetTranslationsList($text = null, $page = null, $showAll = null) {
+		$response = array('success' => false);
+
+		try{
+			$page = $page ? $page : 1;
+			
+			$total = Transation::getTotalRecords($text, !filter_var($showAll, FILTER_VALIDATE_BOOLEAN));
+			$translations = Transation::getRecords($text, !filter_var($showAll, FILTER_VALIDATE_BOOLEAN), self::$wordsPerPage, self::$wordsPerPage * ($page - 1));
+			
+			$pagination = $this->renderPartial('//shared/pagination', array('recordsCount' => count($translations), 'total' => $total, 'selectedPage' => $page, 'recordsPerPage' => self::$wordsPerPage), true, true);
+			$translationsTable = $this->renderPartial('translation-list', array('translations' => $translations, 'pagination' => $pagination), true, true);
+		
+			$response['success'] = true;
+			$response['content'] = $translationsTable;
+			$response['page'] = $page;
+		} catch(Exception $e) {
+			$response['msg'] = Yii::t('errors', $e->getTraceAsString());
+		}
+		
+		echo CJavaScript::jsonEncode($response);
+    Yii::app()->end();
+	}
+	
+	public function actionAppoveDissaproveTranslation($id, $verified) {
+		$response = array('success' => false);
+		
+		try {
+			$criteria = new CDbCriteria();
+			$criteria->addCondition('`id` = :id');
+			$criteria->params = array(':id' => $id);
+
+			$translation = Transation::model()->find($criteria);
+
+			if($translation) {
+				$translation->verified_date = filter_var($verified, FILTER_VALIDATE_BOOLEAN) ? date("Y-m-d H:i:s") : null;
+				$translation->verified_user = Yii::app()->user->getId();
+				$translation->save();
+			}
+			
+			$response['success'] = true;
+		} catch (Exception $e) {
+			$response['msg'] = Yii::t('error', 'Internal error');
+		}
+		
+		echo CJavaScript::jsonEncode($response);
+    Yii::app()->end();
+	}
+	
+	public function actionSaveTranslation($id, $text) {
+		$response = array('success' => false);
+		
+		try {
+			$criteria = new CDbCriteria();
+			$criteria->addCondition('`id` = :id');
+			$criteria->params = array(
+				':id' => $id
+			);
+			
+			$translaiton = Transation::model()->find($criteria);
+
+			if($translaiton) {
+				$translaiton->text = $text;
+				$translaiton->save();
+			}
+			
+			$response['success'] = true;
+		} catch (Exception $e) {
+			$response['msg'] = Yii::t('errors', 'Internal error');
+		}
+		
+		echo CJavaScript::jsonEncode($response);
+    Yii::app()->end();
+	}
+	
+	public function actionRemoveTranslation($id) {
+		$response = array('success' => false);
+		
+		echo CJavaScript::jsonEncode($response);
+    Yii::app()->end();
+	}
+	
+	public function actionLoadWordData($id) {
+		$response = array('success' => false);
+		
+		try {
+			$criteria = new CDbCriteria();
+			$criteria->addCondition('`user_id` = :user_id');
+			$criteria->addCondition('`t`.`word_id` = :word_id');
+
+			$criteria->params = array(
+				':user_id' => Yii::app()->user->id,
+				':word_id' => $id
+			);
+
+			$data = Dictionary::model()->with('translation')->findAll($criteria);
+
+			$result = array();
+			
+			foreach ($data as $elem) {
+				$result[] = array(
+					'dictionary_id' => $elem->id,
+					'translation_id' => $elem->translation->id,
+					'text' => $elem->translation->text,
+					'image_url' => $elem->image_url,
+					'context' => $elem->context
+				);
+			}
+			
+			$response['success'] = true;
+			$response['data'] = $result;
+		}  catch (Exception $e) {
+			$response['msg'] = 'Internal error';
+		}
+		
+		echo CJavaScript::jsonEncode($response);
+    Yii::app()->end();
+	}
+	
+	public function actionSaveDictionaryTranslation($dictionary_id, $image_url, $context) {
+		$response = array('success' => false);
+		
+		try {
+			$criteria = new CDbCriteria();
+			$criteria->addCondition('`user_id` = :user_id');
+			$criteria->addCondition('`id` = :id');
+			$criteria->params = array(
+				':user_id' => Yii::app()->user->id,
+				':id' => $dictionary_id
+			);
+			
+			$dictionary = Dictionary::model()->find($criteria);
+			
+			if($dictionary) {
+				$dictionary->image_url = $image_url ? $image_url : NULL;
+				$dictionary->context = $context;
+				$dictionary->save();
+				
+				$response['success'] = true;
+			} else {
+				$response['msg'] = 'Data was not found';
+			}
+		} catch (Exception $e) {
+			$response['msg'] = 'Internal error occured';
+		}
+		
+		echo CJavaScript::jsonEncode($response);
+    Yii::app()->end();
+	}
+	
+	public function actionDeleteDictionaryTranslation($id) {
+		$respose = array('success' => false);
+		
+		try {
+			$criteria = new CDbCriteria();
+			$criteria->addCondition('`id` => :id');
+			$criteria->addCondition('`user_id` => :user_id');
+			$criteria->params = array(
+				':id' => $id,
+				':user_id' => Yii::app()->user->id
+			);
+			
+			$dictionary = Dictionary::model()->find($criteria);
+			
+			if($dictionary) {
+				$criteria = new CDbCriteria();
+				$criteria->addCondition('`user_id` = :user_id');
+				$criteria->addCondition('`word_id` = :word_id');
+				$criteria->params = array(
+					':user_id' => Yii::app()->user->id,
+					':word_id' => $dictionary->word_id
+				);
+				
+				$recordsWithTheSameTranslationCount = Dictionary::model()->count($criteria);
+				
+				if($recordsWithTheSameTranslationCount > 1) {
+					$dictionary->delete();
+					$respose['success'] = true;
+				} else {
+					$respose['msg'] = 'Last translation cann\'t be deleted';
+				}
+			} else {
+				$respose['msg'] = 'Translation was not found';
+			}
+		} catch (Exception $ex) {
+			$respose['msg'] = 'Internal error occured';
+		}
+	}
+
+	private function normalize_dictionary($dictionary) {
     $result = array();
     
     foreach ($dictionary as $elem) {
@@ -324,6 +528,7 @@ class DictionaryController extends Controller
       }else {
         $result[$elem->word->id] = array(
           'dictionary_id' => $elem->id,
+          'word_id' => $elem->word->id,
           'word' => $elem->word->text,
           'translations' => array($elem->translation->text),
           'contexts' => array($elem->context),
