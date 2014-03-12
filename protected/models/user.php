@@ -149,4 +149,16 @@ class user extends CActiveRecord
 
 		return user::model()->findAll($criteria);
 	}
+	
+	public static function isUserExists($loginOrEmail) {
+		$criteria = new CDbCriteria();
+		$criteria->addCondition('`login` = :login', 'OR');
+		$criteria->addCondition('`email` = :email', 'OR');
+		$criteria->params = array(
+			':login' => $loginOrEmail,
+			':email' => $loginOrEmail
+		);
+		
+		return user::model()->count($criteria) > 0;
+	}
 }

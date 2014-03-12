@@ -7,6 +7,7 @@ class ApiController extends Controller {
 	const API_KEY_IS_NOT_VALID = 2;
 	const INVALID_DATA = 3;
 	const DATA_NOT_FOUND = 4;
+	const USER_ALREADY_EXISTS = 5;
 
 	public function actionGetApiKey($login, $password) {
 		$criteria = new CDbCriteria();
@@ -78,7 +79,8 @@ class ApiController extends Controller {
 				'id' => $content->id,
 				'title' => $content->title,
 				'genre' => $content->genre,
-				'lvl' => $content->lvl,
+				'type' => $content::getTextType($content->type),
+				'lvl' => $content::getTextLevel($content->lvl),
 				'date' => $content->date
 			);
 		}
@@ -112,6 +114,33 @@ class ApiController extends Controller {
 			'date' => $content->date
 		));
 	}
+	
+	public function actionRegisterUser($login, $email, $password) {
+		$response = array('success' => true);
+		
+		try {
+			if(user::isUserExists($login) || user::isUserExists($email)) {
+				$this->error(self::USER_ALREADY_EXISTS);
+			}
+			
+			$user = new user();
+			$user->login = $login;
+			$user->email = $email;
+			$user->type = user::USER_COMMON;
+			$user->register = date('Y-m-d H:i:s');
+			$user->password = md5($password);
+			$user->api_key = md5($email . microtime());
+			$isCreated = $user->save();
+			
+			if($isCreated) {
+				$this->success();
+			} else {
+				$this->error(self::INTERNAL_ERROR);
+			}
+		} catch(Exception $e) {
+			$this->error(self::INTERNAL_ERROR);
+		}
+	}
 
 	private function checkApiKey($api_key) {
 		$user = user::model()->find("`api_key` = '" . $api_key . "'");
@@ -121,7 +150,7 @@ class ApiController extends Controller {
 		}
 	}
 
-	private function success($data) {
+	private function success($data = null) {
 		$response = array('success' => true, 'data' => $data);
 
 		echo CJavaScript::jsonEncode($response);
@@ -157,6 +186,9 @@ class ApiController extends Controller {
 				break;
 			case self::DATA_NOT_FOUND:
 				$msg = 'Data not found';
+				break;
+			case self::USER_ALREADY_EXISTS:
+				$msg = 'User already exists';
 				break;
 			default:
 				$msg = 'Internal error';
