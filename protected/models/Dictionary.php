@@ -256,6 +256,35 @@ class Dictionary extends CActiveRecord
       return Dictionary::model()->with('word', 'translation')->findAll($criteria);
     }
   }
+	
+	public static function getTranslation($text) {
+		$translation_objects = Transation::model()->with(array(
+      'word' => array(
+        'select' => false,
+        'joinType' => "INNER JOIN",
+        'condition' => "word.text = '$text'"
+      )
+    ))->findAll(array(
+      'select' => 'text',
+      'distinct' => true
+    ));
+    
+    $translations = array();
+    
+    foreach ($translation_objects as $obj) {
+      $translations[] = $obj->text;
+    }
+
+    if(count($translations) < 5) {
+      $mt = MicrosoftTranslator::translate($text);
+      $total_translations = array_merge($translations, $mt);
+      $translations = array_unique($total_translations);
+    }
+    
+    $translations = array_slice($translations, 0, 5);
+		
+		return $translations;
+	}
 
   private static function create_word_mp3($text) {
     $audio_path = realpath("./audio");

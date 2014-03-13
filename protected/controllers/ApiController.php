@@ -79,8 +79,8 @@ class ApiController extends Controller {
 				'id' => $content->id,
 				'title' => $content->title,
 				'genre' => $content->genre,
-				'type' => $content::getTextType($content->type),
-				'lvl' => $content::getTextLevel($content->lvl),
+				'type' => $content->type,
+				'lvl' => $content->lvl,
 				'date' => $content->date
 			);
 		}
@@ -105,10 +105,10 @@ class ApiController extends Controller {
 			'id' => $content->id,
 			'title' => $content->title,
 			'ownerId' => $content->owner_id,
-			'type' => $content::getTextType($content->type),
+			'type' => $content->type,
 			'genre' => $content->genre,
 			'text' => $content->text,
-			'lvl' => $content::getTextLevel($content->lvl),
+			'lvl' => $content->lvl,
 			'pages' => $content->pages,
 			'player_link' => $content->player_link,
 			'date' => $content->date
@@ -116,8 +116,6 @@ class ApiController extends Controller {
 	}
 	
 	public function actionRegisterUser($login, $email, $password) {
-		$response = array('success' => true);
-		
 		try {
 			if(user::isUserExists($login) || user::isUserExists($email)) {
 				$this->error(self::USER_ALREADY_EXISTS);
@@ -133,11 +131,44 @@ class ApiController extends Controller {
 			$isCreated = $user->save();
 			
 			if($isCreated) {
-				$this->success();
+				$this->success(array('api_key' => $user->api_key));
 			} else {
 				$this->error(self::INTERNAL_ERROR);
 			}
 		} catch(Exception $e) {
+			$this->error(self::INTERNAL_ERROR);
+		}
+	}
+	
+	public function actionTranslate($api_key, $text) {
+		try {
+			$this->checkApiKey($api_key);
+			$this->success(Dictionary::getTranslation($text));
+		} catch (Exception $ex) {
+			$this->error(self::INTERNAL_ERROR);
+		}
+	}
+	
+	public function actionGetUserDetails($api_key) {
+		try {
+			$criteria = new CDbCriteria();
+			$criteria->addCondition('`api_key` = :api_key');
+			$criteria->params = array(
+				':api_key' => $api_key
+			);
+			
+			$user = user::model()->find($criteria);
+			
+			if(!$user) {
+				$this->error(self::API_KEY_IS_NOT_VALID);
+			}
+			
+			$this->success(array(
+				'login' => $user->login,
+				'email' => $user->email,
+				'registration_date' => $user->register
+			));
+		} catch (Exception $ex) {
 			$this->error(self::INTERNAL_ERROR);
 		}
 	}
