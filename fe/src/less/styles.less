@@ -4,6 +4,8 @@
 @text-color: #4f4c4c; 
 @text-color-hovered: black;
 
+@selected-bg: #f6f6f6;
+
 body {
   background-color: #F8F8F8;
 }
@@ -66,7 +68,7 @@ textarea#content {
 
 	&.selected,
 	&:hover {
-	  background: #f6f6f6;
+	  background: @selected-bg;
 	}
   }
 }
@@ -88,7 +90,7 @@ textarea#content {
   padding: 5px 0;
   
   &:hover {
-	background: #f6f6f6;
+	background: @selected-bg;
 	color: @text-color-hovered;
   }
   
@@ -206,7 +208,7 @@ context.highlight-context {
 
   &.selected,
   &:hover {
-	background-color: #f6f6f6;
+	background-color: @selected-bg;
   }
 }
 
@@ -254,7 +256,7 @@ context.highlight-context {
   }
   
   .contents-list-item {
-	font-size: 20px;
+	font-size: 16px;
 
 	td {
 	  color: @text-color;
@@ -262,7 +264,7 @@ context.highlight-context {
 	}
 	
 	&:hover {
-	  background: #f6f6f6;
+	  background: @selected-bg;
 	  
 	  a,
 	  td {
@@ -351,7 +353,7 @@ context.highlight-context {
 		color: @text-color;
 	  }	  
 	  &>.row:hover {
-		background: #f6f6f6;
+		background: @selected-bg;
 		color: @text-color-hovered;
 		
 		.edit-translation,
@@ -408,10 +410,69 @@ context.highlight-context {
   
   .translations-list-item.selected,
   .translations-list-item:hover {
-    background: #f6f6f6;
+    background: @selected-bg;
   }
   
   .translations-list-item:hover .remove {
 	display: block;
+  }
+}
+
+.change-email,
+.change-password {
+	margin-bottom: 10px;
+}
+
+.statistic-chart-container {
+	& img {
+		margin: 0 auto;
+		display: block;
+	}
+}
+
+#world-build {
+  .question {
+	text-align: center;
+	font-size: 28px;
+	font-weight: bold;
+  }
+  
+  .symbols {
+	text-align: center;
+  }
+  
+  .symbol {
+	margin-right: 10px;
+  }
+  
+  .current-answer {
+	text-align: center;
+	font-size: 28px;
+	min-height: 40px;
+  }
+  
+  .question-voice {
+	margin: 10px auto;
+	height: 30px;
+	font-size: 30px;
+	text-align: center;
+  }
+}
+
+#sound-to-word {
+  .question-voice {
+	margin: 10px auto;
+	height: 50px;
+	line-height: 50px;
+	font-size: 50px;
+	text-align: center;
+  }
+  
+  .answer {
+	margin-right: 15px;
+  }
+  
+  .check-answer {
+	margin-bottom: 20px;
   }
 }

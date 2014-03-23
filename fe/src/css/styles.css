@@ -5726,7 +5726,7 @@ context.highlight-context {
   font-size: 18px;
 }
 .contents-list .contents-list-item {
-  font-size: 20px;
+  font-size: 16px;
 }
 .contents-list .contents-list-item td {
   color: #4f4c4c;
@@ -5849,4 +5849,47 @@ context.highlight-context {
 }
 #edit-dictionary-dialog .translations-list-item:hover .remove {
   display: block;
+}
+.change-email,
+.change-password {
+  margin-bottom: 10px;
+}
+.statistic-chart-container img {
+  margin: 0 auto;
+  display: block;
+}
+#world-build .question {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+}
+#world-build .symbols {
+  text-align: center;
+}
+#world-build .symbol {
+  margin-right: 10px;
+}
+#world-build .current-answer {
+  text-align: center;
+  font-size: 28px;
+  min-height: 40px;
+}
+#world-build .question-voice {
+  margin: 10px auto;
+  height: 30px;
+  font-size: 30px;
+  text-align: center;
+}
+#sound-to-word .question-voice {
+  margin: 10px auto;
+  height: 50px;
+  line-height: 50px;
+  font-size: 50px;
+  text-align: center;
+}
+#sound-to-word .answer {
+  margin-right: 15px;
+}
+#sound-to-word .check-answer {
+  margin-bottom: 20px;
 }
