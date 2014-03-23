@@ -143,7 +143,11 @@ class ApiController extends Controller {
 	public function actionTranslate($api_key, $text) {
 		try {
 			$this->checkApiKey($api_key);
-			$this->success(Dictionary::getTranslation($text));
+			$translations = Dictionary::getTranslation($text);
+			
+			$this->success(array(
+				'transltations' => $translations,
+			));
 		} catch (Exception $ex) {
 			$this->error(self::INTERNAL_ERROR);
 		}
@@ -166,19 +170,95 @@ class ApiController extends Controller {
 			$this->success(array(
 				'login' => $user->login,
 				'email' => $user->email,
+				'avatar' => "https://s.gravatar.com/avatar/" . md5($user->email) . "?s=45",
 				'registration_date' => $user->register
 			));
 		} catch (Exception $ex) {
 			$this->error(self::INTERNAL_ERROR);
 		}
 	}
+	
+	public function actionGetUserDictionary($api_key, $text = null, $count = 10, $offset = 0) {
+		try {
+			$user = $this->checkApiKey($api_key);
 
+			$limit = $count < 10 ? $count : 10;
+
+			$dictionary = Dictionary::getRecords($text, $limit, $offset, $user->id);
+			$dictionary = Dictionary::normalize_dictionary($dictionary);
+			
+			$this->success($dictionary);
+		}  catch (Exception $e) {
+			$this->error(self::INTERNAL_ERROR);
+		}
+	}
+	
+	public function actionExercisesList() {
+		try {
+			$this->success(Exercise::getExercises());
+		} catch (Exception $e) {
+			$this->error(self::INTERNAL_ERROR);
+		}
+	}
+	
+	public function actionGetTraining($api_key, $type) {
+		try {
+			$user = $this->checkApiKey($api_key);
+			$exercises = Exercise::getExercises();
+			
+			if(!in_array($exercises, $type)) {
+				$this->error(self::INVALID_DATA);
+			}
+			
+			switch($type) {
+				case 'Word-Translation':
+					$data = Exercise::getWordsWordTranslation();
+					break;
+				case 'Translation-Word':
+					$data = Exercise::getWordsTranslationWord();
+					break;
+				case 'BuildWord':
+					$data = Exercise::getWordsBuildWord();
+					break;
+				case 'SoundToWord':
+					$data = Exercise::getWordsSoundToWord();
+					break;
+				default:
+					throw new Exception();
+					break;
+			}
+			
+			$this->success($data);
+		} catch (Exception $e) {
+			$this->error(self::INTERNAL_ERROR);
+		}
+	}
+	
+	public function actionProcessResults($api_key, $type, $results) {
+		try {
+			$user = $this->checkApiKey($api_key);
+			$exercises = Exercise::getExercises();
+			
+			if(!in_array($exercises, $type)) {
+				$this->error(self::INVALID_DATA);
+			}
+			
+			Exercise::processTrainingResults($user, $type, $results);
+			
+			$this->success();
+		} catch (Exception $ex) {
+			$this->error(self::INTERNAL_ERROR);
+		}
+	}
+	
 	private function checkApiKey($api_key) {
 		$user = user::model()->find("`api_key` = '" . $api_key . "'");
 
 		if (!$user) {
 			$this->error(self::API_KEY_IS_NOT_VALID);
 		}
+		
+		return $user;
 	}
 
 	private function success($data = null) {

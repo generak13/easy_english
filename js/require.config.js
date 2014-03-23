@@ -1,10 +1,11 @@
 require.config({
 	baseUrl: "../js/",
 	paths: {
-		"jquery": "vendor/jQuery",
+		'jquery': 'vendor/jQuery',
 		'underscore': 'vendor/Underscore',
 		'bb': 'vendor/Backbone',
 		'handlebars': 'vendor/handlebars',
+		'voice': 'vendor/voice',
 
 
 		'router': 'modules/router',
@@ -27,6 +28,5 @@ require.config({
 		'build-word-template': 'templates/build-word-template',
 		'sound-to-word-template': 'templates/sound-to-word-template',
 		'exercise-result-template': 'templates/exercise-result-template'
-	},
-	waitSeconds: 1,
+	}
 });

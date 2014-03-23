@@ -7,27 +7,7 @@
 			<?= $content->player_link ?>
 		</div>
 	<?php } ?>
-	<div class="col-md-5">
-		<div class='content-text'>
-			<?= $content->text ?>
-		</div>
-		<div class="paginator clearfix">
-			<button type="button" class="btn btn-default paginator-prev">
-				<span class="glyphicon glyphicon-chevron-left"></span><?=Yii::t('contents', 'prev')?>
-
-				<button type="button" class="btn btn-default paginator-next pull-right">
-					<?=  Yii::t('contents', 'next')?><span class="glyphicon glyphicon-chevron-right"></span>
-				</button>
-		</div>
-		<div>
-			<?php if ($is_learned) { ?>
-				<button id='set-learned' class='btn btn-primary all-width disabled'><?= Yii::t('contents', 'I have leanred all unknown words') ?></button>
-			<?php } else { ?>
-				<button id='set-learned' class='btn btn-success all-width' ><?= Yii::t('contents', 'I have leanred all unknown words') ?></button>
-			<?php } ?>
-		</div>
-
-	</div>
+	<?=$textContent?>
 	<div class="col-md-2">
 		<div class='words_wrapper'></div>
 		<div class='sentense-translation'></div>

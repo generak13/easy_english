@@ -88,8 +88,8 @@ function getWeekStatistics() {
 function drawChart(statistics) {
   var data = google.visualization.arrayToDataTable(statistics);
 
-  var chart = new google.visualization.ImageLineChart(document.getElementById('chart_div'));
-  chart.draw(data, {width: 400, height: 240, min: 0});
+  var chart = new google.visualization.ImageLineChart($('.statistic-chart-container')[0]);
+  chart.draw(data);
 }
 
 $(document).ready(function() {

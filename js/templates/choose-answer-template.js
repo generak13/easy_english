@@ -4,7 +4,7 @@ define(function() {
 	'<div class="row">' +
 	  '<div class="col-md-3 col-md-offset-2">' +
 		'<div class="question">' +
-		  '<span class="glyphicon glyphicon-play-circle" data-link="{{question.phrase}}"></span>' +
+		  '<span class="glyphicon glyphicon-play-circle sound-icon" data-sound="{{question.voiceLink}}"></span>' +
 		  '{{question.phrase}}'+
 		'</div>' +
 		'<div class="question-image">' + 

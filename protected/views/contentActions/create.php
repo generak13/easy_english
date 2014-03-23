@@ -7,7 +7,6 @@
     'action' => 'create',
     'method' => 'post'
     )); ?>
-      <div class="well">
         <h2><?=Yii::t('contents', 'Create content')?></h2>
         <div class="form-group row">
           <?php echo $form->labelEx($model, 'title', array('class' => 'col-lg-3 control-label'));?>
@@ -57,7 +56,6 @@
             <button class="btn btn-primary btn-block" type="submit"><?=  Yii::t('contents', 'Create')?></button>
           </div>
         </div>
-      </div>
     <?php $this->endWidget(); ?>
   </div>
 </div>

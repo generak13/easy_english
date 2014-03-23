@@ -12,9 +12,9 @@ function bind_events() {
     return false;
   });
   
-  //get translation and hightlight elements
-  $('context').mouseover(function(e) {
-    if(e.target == current_context || $(e.target).closest('context').get(0) == current_context) {
+  $('.content-text')
+	.on('mouseover', 'context', function(e) {
+	if(e.target == current_context || $(e.target).closest('context').get(0) == current_context) {
       return;
     }
     
@@ -25,49 +25,44 @@ function bind_events() {
 
     current_context = target;
     timer = setTimeout(load_translation_context, 1000);
-  });
-  
-  $('context').mouseleave(function(e) {
-    var to_elem = e.toElement;
-    if(to_elem == current_context || $(to_elem).closest('context').get(0) == current_context) {
-      return;
-    }
+  })
+	.on('mouseleave', 'context', function(e) {
+	  var to_elem = e.toElement;
+	  if(to_elem == current_context || $(to_elem).closest('context').get(0) == current_context) {
+		return;
+	  }
+
+	  if(to_elem == $('.dictionary-search-results').get(0) || to_elem == $('.dictionary-search-results-item').closest('div').get(0)) {
+		return;
+	  }
+
+	  clearTimeout(timer);
+	  $(current_context).removeClass('highlight-context');
+
+	  if(current_word) {
+		$(current_word).removeClass('highlight-tran');
+	  }
+
+	  current_context = null;
+	  current_word = null;
+  })
+	.on('mouseleave', 'tran', function(e) {
+	  $(e.target).removeClass('highlight-tran');
+	  current_word = null;
+  })
+	.on('mouseover', 'tran', function(e) {
+	  current_word = e.target;
+	  $(current_word).addClass('highlight-tran');
+  })
+	.on('click', 'tran', function(e) {
+	  searched_word = e.target;
     
-    if(to_elem == $('.dictionary-search-results').get(0) || to_elem == $('.dictionary-search-results-item').closest('div').get(0)) {
-      return;
-    }
-    
-    clearTimeout(timer);
-    $(current_context).removeClass('highlight-context');
-    
-    if(current_word) {
-      $(current_word).removeClass('highlight-tran');
-    }
-    
-    current_context = null;
-    current_word = null;
-  });
-  
-  $('tran').mouseleave(function(e) {
-    $(e.target).removeClass('highlight-tran');
-    current_word = null;
-  });
-  
-  $('tran').mouseover(function(e) {
-    current_word = e.target;
-    $(current_word).addClass('highlight-tran');
-  });
-  
-  //click on the word
-  $('tran').click(function(e) {
-    searched_word = e.target;
-    
-    var text = searched_word.innerHTML;
-    text = $.trim(text);
-    
-    if(text) {
-     show_translation_suggestions(text);
-    }
+	  var text = searched_word.innerHTML;
+	  text = $.trim(text);
+
+	  if(text) {
+	   show_translation_suggestions(text);
+	  }
   });
   
   $('.add-your-translation').click(function() {
@@ -87,6 +82,37 @@ function bind_events() {
       $(current_context).css('background-color', '');
     }
   });
+  
+  $(document)
+	.on('click', '.pagination li', function() {
+	  if(!$(this).hasClass('disabled')) {
+		load_page($(this).data('page'));
+	  }
+	  
+	  return false;
+  });
+}
+
+/**
+ * load page
+ */
+function load_page(page) {
+  var id = $('.content').data('content'); 
+  var params = {
+	'id': id,
+	'page': page || 1
+  };
+  
+  $.getJSON(
+    "/contentActions/show",
+    params,
+    function(response) {
+      if(response.success) {
+        $('.content-text').html(response.data.content);
+        $('.pagination').replaceWith(response.data.pagination);
+      }
+    }
+  );
 }
 
 /**
@@ -173,7 +199,7 @@ function fill_suggestions(suggestions) {
   $('.dictionary-search-results .dictionary-search-results-item').remove();
         
   for(var i = suggestions.length - 1; i >= 0; i--) {
-    $('.dictionary-search-results').prepend('<div class="dictionary-search-results-item">' + suggestions[i] + '</div>');
+    $('.dictionary-search-results').prepend('<div class="dictionary-search-results-item">' + suggestions[i].text + '</div>');
   }
 
   $('.dictionary-search-results').find('input').val('');

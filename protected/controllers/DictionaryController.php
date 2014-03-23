@@ -182,7 +182,7 @@ class DictionaryController extends Controller
     $total_count = Dictionary::getTotalRecords($text);
     $dictionary = Dictionary::getRecords($text, 15);
     
-    $dictionary = $this->normalize_dictionary($dictionary);
+    $dictionary = Dictionary::normalize_dictionary($dictionary);
 		$pagination = $this->renderPartial('//shared/pagination', array('recordsCount' => count($dictionary), 'total' => $total_count, 'selectedPage' => 1, 'recordsPerPage' => self::$wordsPerPage), true, true);
         
     $dictionary_list = $this->renderPartial('dictionary_list', array('dictionary' => $dictionary, 'pagination' => $pagination), true, true);
@@ -243,7 +243,7 @@ class DictionaryController extends Controller
       $total_count = Dictionary::getTotalRecords($text);
       $dictionary = Dictionary::getRecords($text, self::$wordsPerPage, self::$wordsPerPage*($page-1));
     
-      $dictionary = $this->normalize_dictionary($dictionary);
+      $dictionary = Dictionary::normalize_dictionary($dictionary);
       
       if($page > ceil($total_count / self::$wordsPerPage)) {
         $page = 1;
@@ -284,7 +284,7 @@ class DictionaryController extends Controller
           ':content_id' => $content_id
         )
     );
-    $dictionary = $this->normalize_dictionary($dictionary);
+    $dictionary = Dictionary::normalize_dictionary($dictionary);
     
     $response['success'] = true;
     $response['data'] = $dictionary;
@@ -456,7 +456,7 @@ class DictionaryController extends Controller
 	}
 	
 	public function actionDeleteDictionaryTranslation($id) {
-		$respose = array('success' => false);
+		$response = array('success' => false);
 		
 		try {
 			$criteria = new CDbCriteria();
@@ -482,48 +482,18 @@ class DictionaryController extends Controller
 				
 				if($recordsWithTheSameTranslationCount > 1) {
 					$dictionary->delete();
-					$respose['success'] = true;
+					$response['success'] = true;
 				} else {
-					$respose['msg'] = 'Last translation cann\'t be deleted';
+					$response['msg'] = 'Last translation cann\'t be deleted';
 				}
 			} else {
-				$respose['msg'] = 'Translation was not found';
+				$response['msg'] = 'Translation was not found';
 			}
 		} catch (Exception $ex) {
-			$respose['msg'] = 'Internal error occured';
+			$response['msg'] = 'Internal error occured';
 		}
+		
+		echo CJavaScript::jsonEncode($response);
+    Yii::app()->end();
 	}
-
-	private function normalize_dictionary($dictionary) {
-    $result = array();
-    
-    foreach ($dictionary as $elem) {
-      if(array_key_exists($elem->word->id, $result)) {
-        $result[$elem->word->id]['translations'][] = $elem->translation->text;
-        $result[$elem->word->id]['contexts'][] = $elem->context;
-        
-        if($elem->added_datetime > $result[$elem->word->id]['date']) {
-          $result[$elem->word->id]['date'] = $elem->added_datetime;
-        }
-      }else {
-        $result[$elem->word->id] = array(
-          'dictionary_id' => $elem->id,
-          'word_id' => $elem->word->id,
-          'word' => $elem->word->text,
-          'translations' => array($elem->translation->text),
-          'contexts' => array($elem->context),
-          'sound' => '/audio/' . $elem->word->text . '.mp3',
-          'date' => $elem->added_datetime
-        );
-      }
-    }
-    
-    usort($result, array($this, 'sort_dictionary'));
-    
-    return $result;
-  }
-  
-  private function sort_dictionary($a, $b) {
-    return $a['date'] < $b['date'];
-  }
 }

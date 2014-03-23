@@ -124,10 +124,6 @@ class Statistics extends CActiveRecord
 		}
 		
 		$stat->save();
-		
-		echo '<pre>';
-		print_r($stat->getErrors());
-		die();
 	}
 	
 	public static function getUserWeekStatistics($userId) {

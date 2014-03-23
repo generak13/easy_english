@@ -90,9 +90,10 @@ class ContentActionsController extends Controller
         $content->owner_id = Yii::app()->user->getId();
         
         $words = explode(' ', $content->text);
-        $pages = ceil(count($words)/Content::$WORDS_PER_PAGE);
+        $pages = $content->calculatePagesCount($content);
         
         $content->pages = $pages;
+        $content->date = date('Y-m-d H:i:s');
         $content->save();
         $this->redirect(Yii::app()->user->returnUrl);
       }
@@ -101,7 +102,7 @@ class ContentActionsController extends Controller
     $this->render('create', array('model' => $model));
   }
   
-  public function actionShow($id) {
+  public function actionShow($id, $page = 1) {
     $content = Content::model()->find('id=:id', array(':id' => $id));
 
     if($content) {
@@ -114,23 +115,39 @@ class ContentActionsController extends Controller
         $user2content->status = 0;
         $user2content->save();
       }
-      
-      $groups_by_dot = explode("\n", $content->text);
-      
-      foreach ($groups_by_dot as $key => $value) {
+			
+			$text = $content->getTextByPage($page);
+      $contexts = $content->getContexts($text);
+			
+      foreach ($contexts as $key => $value) {
         $words = explode(' ', $value);
         
         foreach ($words as $index => $word) {
           $words[$index] = '<tran>' . $word . '</tran>';
         }
-        
+				
         $words = implode(" ", $words);
-        $groups_by_dot[$key] = '<context>' . $words . '</context>';
+        $contexts[$key] = '<context>' . $words . '</context>';
       }
-      
-      $content->text = implode("\n", $groups_by_dot);
+
+      $content->text = implode("\n", $contexts);
       $content->text = nl2br($content->text);
-      $this->render('show', array('content' => $content, 'is_learned' => $user2content->status == 1));
+
+			$pagination = $this->renderPartial('//shared/pagination', array('recordsCount' => 1, 'total' => $content->pages, 'selectedPage' => $page, 'recordsPerPage' => 1), true, true);
+      
+			if(Yii::app()->request->isAjaxRequest) {
+				$response = array('success' => true);
+				$response['data'] = array(
+					'content' => $content->text,
+					'pagination' => $pagination
+				);
+				
+				echo CJavaScript::jsonEncode($response);
+				return;
+			}
+			
+			$textContent = $this->renderPartial('textContent', array('text' => $content->text, 'isTextType' => $content->type == Content::$TYPE_TEXT, 'isLearned' => $user2content->status == 1, 'pagination' => $pagination), true, true);
+			$this->render('show', array('content' => $content, 'textContent' => $textContent));
     }
   }
   
@@ -160,7 +177,7 @@ class ContentActionsController extends Controller
 
     if(isset($_GET['title']) && $_GET['title']) {
       $title = addcslashes($_GET['title'], '%_');
-      $criteria->addCondition('title LIKE ' . $title);
+			$criteria->addSearchCondition('title', $title);
     }
     
     if(isset($_GET['type']) && $_GET['type'] != 'all') {
@@ -292,4 +309,5 @@ class ContentActionsController extends Controller
     return $input_type;
   }
   
+	
 }

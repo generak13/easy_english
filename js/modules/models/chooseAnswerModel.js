@@ -1,4 +1,4 @@
-define(['underscore', 'bb'], function (_, bb) {
+define(['underscore', 'bb', 'voice'], function (_, bb) {
 	
 	var ChooseAnswerModule = bb.Model.extend({
 		defaults: {

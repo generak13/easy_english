@@ -31,6 +31,9 @@ class Content extends CActiveRecord
 	public static $LVL_HARD = 3;
   
   public static $WORDS_PER_PAGE = 300;
+  public static $VIDEO_AUDIO_SPP = 1000;
+  public static $TEXT_SPP = 3000;
+	private static $CONTEXT_DELIMITERS = array('.', '?', '!', ';', "\n");
 	
 	private static function getTypeMapping() {
 		return array(
@@ -69,7 +72,7 @@ class Content extends CActiveRecord
 	public function getLevelByText($text) {
 		$lvl = self::$LVL_EASY;
         
-		switch ($model->lvl) {
+		switch ($text) {
 			case 'easy':
 				$lvl = self::$LVL_EASY;
 				break;
@@ -204,5 +207,61 @@ class Content extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+	
+	public function calculatePagesCount($content) {
+		if($content->type == self::$TYPE_TEXT) {
+			return ceil(mb_strlen($content->text) / self::$TEXT_SPP);
+		}
+		
+		return ceil(mb_strlen($content->text) / self::$VIDEO_AUDIO_SPP);
+	}
+
+	public function getContexts($string) {
+		$return_array = Array($string); // The array to return
+		$d_count = 0;
+		while (isset(self::$CONTEXT_DELIMITERS[$d_count])) {
+			$new_return_array = Array();
+			foreach($return_array as $el_to_split) {
+				$put_in_new_return_array = explode(self::$CONTEXT_DELIMITERS[$d_count],$el_to_split);
+				foreach($put_in_new_return_array as $substr) {
+					$new_return_array[] = $substr;
+				}
+			}
+			
+			$return_array = $new_return_array; // Replace the previous return array by the next version        
+			$d_count++;
+		}
+		
+		return $return_array; // Return the exploded elements}
+	}
+	
+	public function getTextByPage($page, $start = 0) {
+		$text = $this->text;
+		$symbolsPerPage = $this->type == self::$TYPE_TEXT ? self::$TEXT_SPP : self::$VIDEO_AUDIO_SPP;
+		$totalLength = mb_strlen($text);
+		
+		$start = $this->getPagePosition(mb_substr($text, 0, $symbolsPerPage * ($page - 1)));
+		$end = $totalLength;
+		
+		if($totalLength > $page * $symbolsPerPage) {
+			$end = $this->getPagePosition(mb_substr($text, 0, $symbolsPerPage * $page));
+		}
+		
+		return mb_substr($text, $start, $end - $start);
+	}
+	
+	private function getPagePosition($text) {
+		$value = 0;
+
+		foreach (self::$CONTEXT_DELIMITERS as $symbol) {
+			$occurance = strrpos($text, $symbol);
+			
+			if($occurance > $value) {
+				$value = $occurance;
+			}
+		}
+		
+		return $value;
 	}
 }

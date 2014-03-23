@@ -131,12 +131,8 @@ class Dictionary extends CActiveRecord
         'condition' => 'word.text="'. $word_to_add . '"'
     )))->find('user_id=:user_id', array(':user_id' => Yii::app()->user->getId()));
     
-    if($dictionary) {
-      return false;
-    }
-    
     $word = Word::model()->find('text=:text', array(':text' => $word_to_add));
-		$image_url = TextToImage::getImageUrlByText($word_to_add);
+		$image_url = TextToImage::getImageUrlByText($translation_for_word);
     
     //check current word exists in global glossary
     if(!$word) {
@@ -159,7 +155,9 @@ class Dictionary extends CActiveRecord
         $translation->word_id = $word->id;
         $translation->text = $translation_for_word;
         $translation->save();
-      }
+      } else if($translation->id == $dictionary->translation_id) {
+				return false;
+			}
     }
     
     $dictionary = new Dictionary();
@@ -232,10 +230,12 @@ class Dictionary extends CActiveRecord
     }
   }
   
-  public static function getRecords($text, $limit = null, $offset = null) {
+  public static function getRecords($text, $limit = null, $offset = null, $userId = null) {
+		$userId = $userId ? $userId : Yii::app()->user->getId();
+		
     $criteria = new CDbCriteria();
     $criteria->addCondition('user_id=:user_id');
-    $criteria->params = array(':user_id' => Yii::app()->user->getId());
+    $criteria->params = array(':user_id' => $userId);
     
     if($limit) {
       $criteria->limit = $limit;
@@ -283,8 +283,52 @@ class Dictionary extends CActiveRecord
     
     $translations = array_slice($translations, 0, 5);
 		
-		return $translations;
+		$result = array();
+		
+		foreach ($translations as $translation) {
+			$result[] = array(
+				'text' => $translation,
+				'image' => TextToImage::getImageUrlByText($translation)
+			);
+		}
+		
+		return $result;
 	}
+	
+	public static function normalize_dictionary($dictionary) {
+    $result = array();
+    
+    foreach ($dictionary as $elem) {
+      if(array_key_exists($elem->word->id, $result)) {
+        $result[$elem->word->id]['translations'][] = $elem->translation->text;
+        $result[$elem->word->id]['contexts'][] = $elem->context;
+        $result[$elem->word->id]['images'][] = $elem->image_url;
+        
+        if($elem->added_datetime > $result[$elem->word->id]['date']) {
+          $result[$elem->word->id]['date'] = $elem->added_datetime;
+        }
+      }else {
+        $result[$elem->word->id] = array(
+          'dictionary_id' => $elem->id,
+          'word_id' => $elem->word->id,
+          'word' => $elem->word->text,
+          'translations' => array($elem->translation->text),
+          'contexts' => array($elem->context),
+          'images' => array($elem->image_url),
+          'sound' => $elem->word->audio,
+          'date' => $elem->added_datetime
+        );
+      }
+    }
+    
+    usort($result, array('Dictionary', 'sort_dictionary'));
+    
+    return $result;
+	}
+	
+	private static function sort_dictionary($a, $b) {
+    return $a['date'] < $b['date'];
+  }
 
   private static function create_word_mp3($text) {
     $audio_path = realpath("./audio");

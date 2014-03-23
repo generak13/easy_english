@@ -1,11 +1,12 @@
-<div class="col-md-12">
-	<div class="col-md-4">
+<div class="row">
+	<div class="col-md-3">
 		<div class="span3 settings-avatar">
-			<div class="center"><img class="user-avatar" src="https://s.gravatar.com/avatar/<?= md5(user::model()->find('id=:id', array(':id' => Yii::app()->user->id))->email) ?>?s=180"></div>
+			<div class="center">
+				<img class="user-avatar" src="https://s.gravatar.com/avatar/<?= md5(user::model()->find('id=:id', array(':id' => Yii::app()->user->id))->email) ?>?s=180">
+			</div>
 			<div class="change-avatar-help">
-				<div class="center ">
+				<div class="center">
 					<div class="help-block small muted"><?= Yii::t('profile', 'Change your avatar with <a href="http://www.gravatar.com" target="_blank">Gravatar</a>.') ?></div>
-					<a href="#how-to-change-avatar" data-toggle="collapse" class="ajax-link"><?= Yii::t('profile', 'How to Change') ?></a>                      
 				</div>
 
 				<div id="how-to-change-avatar" class="help-block small how-to-change-avatar-hide in collapse" style="height: auto;">
@@ -24,28 +25,46 @@
 		</div>
 	</div>
 
-  <div class="col-md-8">
-		<div>
-			<label for="login"><?= Yii::t('profile', 'Login:') ?></label>
-			<input id="login" name="login" type="text" value="<?= $user->login ?>" />
+	<div class="col-md-9">
+		<div class="row change-email">
+			<div class='form-group row'>
+				<label class='col-lg-2 control-label text-right reqired' for="login"><?= Yii::t('profile', 'Login:') ?></label>
+				<div class='col-lg-5'>
+					<input class='form-control' id="login" name="login" type="text" value="<?= $user->login ?>" />
+				</div>
+				
+			</div>
+			<div class='form-group row'>
+				<label class='col-lg-2 control-label text-right required'  for="email"><?= Yii::t('profile', 'Email:') ?></label>
+				<div class='col-lg-5'>
+					<input class='form-control' id="email" name="email" type="text" value="<?= $user->email ?>" />
+				</div>
+			</div>
+			<div class="col-md-offset-5 col-md-2 form-group">
+				<button class='btn btn-primary all-width' id="change-login-email" type="submit"><?= Yii::t('profile', 'Change') ?></button>
+			</div>
 		</div>
-		<div>
-			<label for="email"><?= Yii::t('profile', 'Email:') ?></label>
-			<input id="email" name="email" type="text" value="<?= $user->email ?>" />
-		</div>
-		<button id="change-login-email" type="submit"><?= Yii::t('profile', 'Change') ?></button>
 
-		<div>
-			<label for="password"><?= Yii::t('profile', 'New password:') ?></label>
-			<input id="password" name="password" type="text" value="" />
+		<div class="row change-password">
+			<div class='form-group row'>
+				<label class='col-lg-2 control-label text-right required'  for="password"><?= Yii::t('profile', 'New password:') ?></label>
+				<div class='col-lg-5'>
+					<input class='form-control' id="password" name="password" type="text" value="" />
+				</div>
+			</div>
+			<div class='form-group row'>
+				<label class='col-lg-2 control-label text-right required'  for="repeat_password"><?= Yii::t('profile', 'Repeat password:') ?></label>
+				<div class='col-lg-5'>
+					<input class='form-control' id="repeat_password" name="repeat_password" type="text" value="" />
+				</div>
+			</div>
+			<div class="col-md-offset-5 col-md-2 form-group">
+				<button class='btn btn-primary all-width' id="change-password" type="submit"><?= Yii::t('profile', 'Change') ?></button>
+			</div>
 		</div>
-		<div>
-			<label for="repeat_password"><?= Yii::t('profile', 'Repeat password:') ?></label>
-			<input id="repeat_password" name="repeat_password" type="text" value="" />
-		</div>
-		<button id="change-password" type="submit"><?= Yii::t('profile', 'Submit') ?></button>
+		<h3>Week Statistic</h3>
+		<div class="statistic-chart-container"></div>
 	</div>
-	<div id="chart_div"></div>
 </div>
 
 

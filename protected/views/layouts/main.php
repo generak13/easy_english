@@ -6,10 +6,10 @@
 		<meta name="language" content="en" />
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
 		<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/styles.css">
-<!--		<script type="text/javascript" src="//www.google.com/jsapi"></script>
+		<script type="text/javascript" src="//www.google.com/jsapi"></script>
 		<script type="text/javascript">
       google.load('visualization', '1', {packages: ['imagelinechart']});
-    </script>-->
+    </script>
       <title><?php echo CHtml::encode($this->pageTitle); ?></title>
   </head>
 
@@ -38,7 +38,10 @@
 							</li>
 							<li>
 								<?= CHtml::link(Yii::t('menu', 'Dictionary'), array('dictionary/dictionary')) ?>
-							</li>                
+							</li>
+							<li>
+								<?= CHtml::link(Yii::t('menu', 'Exercises'), array('exercises/list')) ?>
+							</li>
 							<li class="logout-gravatar">
 								<img src="https://s.gravatar.com/avatar/<?= md5(user::model()->find('id=:id', array(':id' => Yii::app()->user->id))->email) ?>?s=45"></img>
 								<ul>

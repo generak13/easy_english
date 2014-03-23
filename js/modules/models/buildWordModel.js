@@ -31,9 +31,8 @@ define(['underscore', 'bb'], function (_, bb) {
 
 		'fetch': function () {
       var data;
-      debugger;
-			$.ajax({
-				url: '/exercises/GetWords',
+	  $.ajax({
+		url: '/exercises/GetWords',
         async: false,
         dataType: 'JSON',
         data: {
@@ -44,7 +43,7 @@ define(['underscore', 'bb'], function (_, bb) {
         data = response;
       });
       return data;
-		},
+	  },
     
     'sendResults': function() {
       var obj = [];

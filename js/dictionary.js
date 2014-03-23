@@ -134,7 +134,7 @@ function show_translation_suggestions() {
         $('.dictionary-search-results .dictionary-search-results-item').remove();
         
         for(var i = response.data.length - 1; i >= 0; i--) {
-          $('.dictionary-search-results').prepend('<div class="dictionary-search-results-item">' + response.data[i] + '</div>');
+          $('.dictionary-search-results').prepend('<div class="dictionary-search-results-item">' + response.data[i].text + '</div><img style="float: right; height: 5px;" src="' + response.data[i].image + '">');
         }
         
         $(suggestions_block).find('input').val('');
@@ -239,10 +239,10 @@ function EditDictionaryItem(elem) {
 		  });
 		});
 	})
-	  .on('click', '.remove', function() {debugger;
-		var id = $(this).parent().data()[id];
+	  .on('click', '.remove', function() {
+		var id = $(this).parent().data().id;
 		var selectedItem = getSelectedDataItem(id);
-		if (editData.data.lenght > 1) {
+		if (editData.data.length > 1) {
 		  $.ajax({
 			url: '/dictionary/deleteDictionaryTranslation',
 			type: 'GET',
