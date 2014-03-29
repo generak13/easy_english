@@ -13,7 +13,7 @@
 class TextToImage {
 
   public static function getImageUrlByText($text) {
-		$json = self::get_url_contents('http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' . urlencode($text));
+		$json = self::get_url_contents('http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' . urlencode($text) . '&safe=active');
 		$data = json_decode($json, true);
 		
 		if(isset($data['responseData']['results']) && isset($data['responseData']['results'])) {

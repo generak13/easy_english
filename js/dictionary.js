@@ -8,6 +8,7 @@ function bindEvents() {
   $('.sound-icon').click(function(event) {
     var audio = new Audio();
     audio.src = $(this).data('sound');
+    audio.setAttribute('type', 'audio/mp3'); 
     audio.play();
 
     event.preventDefault();

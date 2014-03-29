@@ -61,7 +61,7 @@
 			</li>
 			<li>
 				<div>
-					<a href="/contentActions/create">
+					<a href="/contentActions/create" class="add-content">
 						<?=  Yii::t('contents', 'Add Content')?>
 					</a>
 				</div>

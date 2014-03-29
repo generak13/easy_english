@@ -122,14 +122,16 @@ class Dictionary extends CActiveRecord
 		return parent::model($className);
 	}
   
-  public static function addToDictionary($word_to_add, $translation_for_word, $context, $content_id) {
+  public static function addToDictionary($word_to_add, $translation_for_word, $context, $content_id, $user_id = null) {
+		$user_id = $user_id ? $user_id : Yii::app()->user->getId();
+		
     //check if current user already has this word
     $dictionary = Dictionary::model()->with(array(
       'word' => array(
         'select' => false,
         'joinType' => 'INNER JOIN',
         'condition' => 'word.text="'. $word_to_add . '"'
-    )))->find('user_id=:user_id', array(':user_id' => Yii::app()->user->getId()));
+    )))->find('user_id=:user_id', array(':user_id' => $user_id));
     
     $word = Word::model()->find('text=:text', array(':text' => $word_to_add));
 		$image_url = TextToImage::getImageUrlByText($translation_for_word);
@@ -163,7 +165,7 @@ class Dictionary extends CActiveRecord
     $dictionary = new Dictionary();
     $dictionary->word_id = $word->id;
     $dictionary->translation_id = $translation->id;
-    $dictionary->user_id = Yii::app()->user->getId();
+    $dictionary->user_id = $user_id;
     $dictionary->context = $context;
     $dictionary->image_url = $image_url ? $image_url : NULL;
     $dictionary->content_id = $content_id;

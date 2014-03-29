@@ -5531,7 +5531,7 @@ body {
   margin-top: 7px;
 }
 textarea {
-  resize: none;
+  resize: vertical;
 }
 textarea#content {
   height: 200px;
@@ -5539,6 +5539,9 @@ textarea#content {
 .video iframe {
   width: 100%;
   height: 260px;
+}
+span.content-name {
+  font-size: 22px;
 }
 .content-nav {
   margin: 0 0 0 -39px;
@@ -5892,4 +5895,7 @@ context.highlight-context {
 }
 #sound-to-word .check-answer {
   margin-bottom: 20px;
+}
+a.add-content {
+  display: block;
 }

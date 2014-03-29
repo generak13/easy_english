@@ -150,9 +150,9 @@ function add_word(word, translation, context) {
 function add_word_to_glossary_panel(word, translation) {
   var html_record =
     '<div>' + 
-    '<div class="sound-icon" data-sound="/audio/' + word + '.mp3">' + 
+    '<span class="sound-icon" data-sound="/audio/' + word + '.mp3">' + 
       '<span class="glyphicon glyphicon-play-circle"></span>' +
-    '</div>' + 
+    '</span>' + 
     '<span class="english-word">' + 
       '<a target="_blank" href="/dictionary/dictionary?text=' + word + '">' + word + '</a>' + 
     '</span> - <span class="translate">' + translation + '</span></div>';

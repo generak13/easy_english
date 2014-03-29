@@ -29,6 +29,10 @@ class Content extends CActiveRecord
 	public static $LVL_EASY = 1;
 	public static $LVL_MEDUIM = 2;
 	public static $LVL_HARD = 3;
+	
+	public static $GENRE_TOURISM = 0;
+	public static $GENRE_IT = 1;
+	public static $GENRE_REST = 2;
   
   public static $WORDS_PER_PAGE = 300;
   public static $VIDEO_AUDIO_SPP = 1000;
@@ -51,6 +55,14 @@ class Content extends CActiveRecord
 		);
 	}
 	
+	private static function getGenreMapping() {
+		return array(
+			Content::$GENRE_TOURISM = 'tourism',
+			Content::$GENRE_IT = 'it',
+			Content::$GENRE_REST = 'rest'
+		);
+	}
+
 	public function getTypeByText($text) {
 		$type = Content::$TYPE_TEXT;
         
@@ -87,6 +99,25 @@ class Content extends CActiveRecord
 		return $lvl;
 	}
 	
+	public function getGenreByText($text) {
+		$genre = self::$GENRE_TOURISM;
+		
+		switch ($text) {
+			case 'tourism':
+				$genre = self::$GENRE_TOURISM;
+				break;
+			case 'it':
+				$genre = self::$GENRE_IT;
+				break;
+			case 'rest':
+				$genre = self::$GENRE_REST;
+				break;
+		}
+		
+		return $genre;
+	}
+
+
 	public static function getTextType($type) {
 		$mapping = Content::getTypeMapping();
 		
@@ -102,6 +133,16 @@ class Content extends CActiveRecord
 		
 		if(isset($mapping[$lvl])) {
 			return $mapping[$lvl];
+		}
+		
+		return false;
+	}
+	
+	public static function getTextGenre($genre) {
+		$mapping = Content::getGenreMapping();
+		
+		if(isset($mapping[$genre])) {
+			return $mapping[$genre];
 		}
 		
 		return false;

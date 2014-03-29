@@ -4,10 +4,18 @@
     'id'=>'create-content-form',
     'enableAjaxValidation'=>true,
     'enableClientValidation'=>true,
-    'action' => 'create',
+    'action' => $action,
     'method' => 'post'
     )); ?>
-        <h2><?=Yii::t('contents', 'Create content')?></h2>
+        <h2>
+					<?php if($action == 'create') {
+						echo Yii::t('contents', 'Create content');
+					} else {
+						echo Yii::t('contents', 'Edit content');
+					}
+					?>
+				</h2>
+				<?php echo $form->hiddenField($model, 'identifier')?>
         <div class="form-group row">
           <?php echo $form->labelEx($model, 'title', array('class' => 'col-lg-3 control-label'));?>
           <div class="col-lg-9">
@@ -53,7 +61,7 @@
 
         <div class="form-group row">
           <div class="col-lg-offset-9 col-lg-3">
-            <button class="btn btn-primary btn-block" type="submit"><?=  Yii::t('contents', 'Create')?></button>
+            <button class="btn btn-primary btn-block" type="submit"><?=  Yii::t('contents', 'Save')?></button>
           </div>
         </div>
     <?php $this->endWidget(); ?>

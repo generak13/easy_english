@@ -193,12 +193,27 @@ class ApiController extends Controller {
 		}
 	}
 	
+	public function actionAddToDictionary($api_key, $eng_text, $translation, $context = null, $content_id = null) {
+		try {
+			$user = $this->checkApiKey($api_key);
+			
+			Dictionary::addToDictionary($eng_text, $translation, $context, $content_id, $user->id);
+			$this->success();
+		} catch (Exception $ex) {
+			$this->error(self::INTERNAL_ERROR);
+		}
+	}
+	
 	public function actionExercisesList() {
 		try {
 			$this->success(Exercise::getExercises());
 		} catch (Exception $e) {
 			$this->error(self::INTERNAL_ERROR);
 		}
+	}
+	
+	public function actionPhpinfo() {
+		echo phpinfo();
 	}
 	
 	public function actionGetTraining($api_key, $type) {

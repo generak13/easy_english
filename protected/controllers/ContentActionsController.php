@@ -89,7 +89,6 @@ class ContentActionsController extends Controller
         $content->lvl = $content->getLevelByText($model->lvl);
         $content->owner_id = Yii::app()->user->getId();
         
-        $words = explode(' ', $content->text);
         $pages = $content->calculatePagesCount($content);
         
         $content->pages = $pages;
@@ -99,8 +98,64 @@ class ContentActionsController extends Controller
       }
     }
     
-    $this->render('create', array('model' => $model));
+    $this->render('create', array('model' => $model, 'action' => 'create'));
   }
+	
+	public function actionEdit($id = 0) {
+		$id = isset($_POST['CreateContentForm']) ? (int)$_POST['CreateContentForm']['identifier'] : $id;
+		
+		$criteria = new CDbCriteria();
+		$criteria->addCondition('id=:id');
+		$criteria->addCondition('owner_id=:owner_id');
+		$criteria->params = array(
+			':id' => $id,
+			':owner_id' => Yii::app()->user->id
+		);
+		$content = Content::model()->find($criteria);
+		
+		if(!$content) {
+			$this->redirect('/contentAction/show/' . $id);
+		}
+		
+		$model = new CreateContentForm();
+
+    if(isset($_POST['CreateContentForm'])) {
+      $model->attributes = $_POST['CreateContentForm'];
+      
+      if($model->validate()) {
+        $content->title = $model->title;
+        $content->text = $model->text;
+        
+        $content->type = $content->getTypeByText($model->type);
+        
+        if($content->type == content::$TYPE_AUDIO || $content->type == content::$TYPE_VIDEO) {
+          $content->player_link = $model->player_link;
+        }
+				
+        $content->genre = $content->getGenreByText($model->genre);
+        
+        $content->lvl = $content->getLevelByText($model->lvl);
+        $content->owner_id = Yii::app()->user->getId();
+        
+        $pages = $content->calculatePagesCount($content);
+        
+        $content->pages = $pages;
+        $content->date = date('Y-m-d H:i:s');
+        $content->save();
+        $this->redirect('/contentActions/list');
+      }
+    } else {
+			$model->identifier = $content->id;
+			$model->title = $content->title;
+			$model->genre = Content::getTextGenre($content->genre);
+			$model->type = Content::getTextType($content->type);
+			$model->player_link = $content->player_link;
+			$model->lvl = Content::getTextLevel($content->lvl);
+			$model->text = $content->text;
+		}
+
+		$this->render('create', array('model' => $model, 'action' => 'edit'));
+	}
   
   public function actionShow($id, $page = 1) {
     $content = Content::model()->find('id=:id', array(':id' => $id));
@@ -118,12 +173,12 @@ class ContentActionsController extends Controller
 			
 			$text = $content->getTextByPage($page);
       $contexts = $content->getContexts($text);
-			
-      foreach ($contexts as $key => $value) {
+
+			foreach ($contexts as $key => $value) {
         $words = explode(' ', $value);
-        
-        foreach ($words as $index => $word) {
-          $words[$index] = '<tran>' . $word . '</tran>';
+
+				foreach ($words as $index => $word) {
+					$words[$index] = '<tran>' . trim($word) . '</tran>';
         }
 				
         $words = implode(" ", $words);

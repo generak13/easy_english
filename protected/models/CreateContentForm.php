@@ -2,6 +2,7 @@
 
 class CreateContentForm extends CFormModel
 {
+	public $identifier;
 	public $title;
 	public $genre;
 	public $text;
@@ -13,7 +14,7 @@ class CreateContentForm extends CFormModel
 	{
 		return array(
 			array('title, text, genre, type, lvl', 'required'),
-      array('player_link', 'safe')
+      array('identifier, player_link', 'safe')
 		);
 	}
 	

@@ -2,7 +2,9 @@
  * init
  */
 function init() {
-  $('#CreateContentForm_player_link').closest('.row').hide();
+  if($('#CreateContentForm_type').val() == 'text') {
+	$('#CreateContentForm_player_link').closest('.row').hide();
+  }
 }
 
 function bind_events() {

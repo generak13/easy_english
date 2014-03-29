@@ -1,6 +1,9 @@
 <div class="row content" data-content='<?= $content->id ?>'>
 	<div class="col-md-12">
-		<h2><?= $content->title ?></h2>
+		<span class="content-name"><?= $content->title ?></span>
+		<?php if($content->owner_id == Yii::app()->user->id) {?>
+			<a href="/contentActions/edit/<?=$content->id?>" class="glyphicon glyphicon-pencil" title="<?=Yii::t('content', 'Edit')?>"></a>
+		<?php }?>
 	</div>
 	<?php if ($content->type == content::$TYPE_AUDIO || $content->type == content::$TYPE_VIDEO) { ?>
 		<div class="col-md-5 video">
