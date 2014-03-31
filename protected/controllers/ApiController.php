@@ -198,7 +198,7 @@ class ApiController extends Controller {
 			$user = $this->checkApiKey($api_key);
 			
 			Dictionary::addToDictionary($eng_text, $translation, $context, $content_id, $user->id);
-			$this->success();
+			$this->success(array('eng_text' => $eng_text, 'translation' => $translation, 'context' => $context, 'content_id' => $content_id));
 		} catch (Exception $ex) {
 			$this->error(self::INTERNAL_ERROR);
 		}
@@ -221,22 +221,22 @@ class ApiController extends Controller {
 			$user = $this->checkApiKey($api_key);
 			$exercises = Exercise::getExercises();
 			
-			if(!in_array($exercises, $type)) {
+			if(!in_array($type, $exercises)) {
 				$this->error(self::INVALID_DATA);
 			}
 			
 			switch($type) {
 				case 'Word-Translation':
-					$data = Exercise::getWordsWordTranslation();
+					$data = Exercise::getWordsWordTranslation($user);
 					break;
 				case 'Translation-Word':
-					$data = Exercise::getWordsTranslationWord();
+					$data = Exercise::getWordsTranslationWord($user);
 					break;
 				case 'BuildWord':
-					$data = Exercise::getWordsBuildWord();
+					$data = Exercise::getWordsBuildWord($user);
 					break;
 				case 'SoundToWord':
-					$data = Exercise::getWordsSoundToWord();
+					$data = Exercise::getWordsSoundToWord($user);
 					break;
 				default:
 					throw new Exception();
