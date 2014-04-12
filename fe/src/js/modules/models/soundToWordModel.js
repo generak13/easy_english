@@ -10,7 +10,8 @@ define(['underscore', 'bb'], function (_, bb) {
 						phrase: 'bo-bo',
 						pictureLink: '1',
 						voiceLink: '1',
-						correct: false,
+						wasAnswered: false,
+						correct: false
 					}
 				}
 			]
