@@ -32,14 +32,19 @@ angular.module('exercisesApp.Models', []).config(function($provide) {
         };
         return m;
     });
-    $provide.factory('exModel', function (resultsModel) {
+    $provide.factory('exModel', function (resultsModel, $http) {
         return {
-            model: {},
-            current: 0,
+			data: {
+			  current: 0,
+			  questions: []
+			},
             currentQ: {},
 
             'next': function () {
-                this.data.current++;
+			  if (this.data.current < this.data.questions.length) {
+				this.data.current++;
+			  }
+				
             },
             'generateResults': function () {
                 var data = [];
@@ -47,103 +52,94 @@ angular.module('exercisesApp.Models', []).config(function($provide) {
                     data.push({
                         id: this.data.questions[i].question.id,
                         phrase: this.data.questions[i].question.phrase,
-                        isCorrect: this.data.questions[i].question.correct
+                        correct: this.data.questions[i].question.correct
                     });
                 }
+				this.sendResults(data);
                 resultsModel.setData(data);
-            }
+            },
+			fetch: function() {
+			  this.data.current = 0;
+			  var data;
+			  $.ajax({
+				url: '/exercises/GetWords',
+				async: false,
+				dataType: 'JSON',
+				data: {
+				  type: this.type
+				},
+				type: "GET"
+			  }).done(function(response) {
+				data = response;
+			  });
+			  return data;
+			},
+			sendResults: function (data) {
+			  $.ajax({
+				url: '/exercises/processResults',
+				async: true,
+				dataType: 'JSON',
+				data: {
+				  type: this.type,
+				  results: data
+				},
+				type: "POST"
+			  });
+			}
         };
     });
-    $provide.factory('exWordTranslateModel', function(exModel) {
+    $provide.factory('exEnUaModel', function(exModel) {
         function ExModel () {};
+		exModel.type = 'Word-Translation';
         ExModel.prototype = exModel;
         var model = new ExModel();
 
         model.getData = function () {
-            var data = {
-                current: 0,
-                questions: [{
-                    question: {
-                        id: 1,
-                        phrase: '1',
-                        pictureLink: '1',
-                        voiceLink: 'http://cdn.mos.musicradar.com//audio/samples/dubstep-demo-loops/DS_BeatF145-01.mp3',
-                        answerId: 3,
-                        correct: false,
-                        wasAnswered: false
-                    },
-                    answers: [{
-                        id: 1,
-                        phrase: '1'
-                    }, {
-                        id: 2,
-                        phrase: '2'
-                    }, {
-                        id: 3,
-                        phrase: '3'
-                    }, {
-                        id: 4,
-                        phrase: '4'
-                    }]
-                }, {
-                    question: {
-                        id: 1,
-                        phrase: '2',
-                        pictureLink: '1',
-                        voiceLink: 'http://www.tonycuffe.com/mp3/tailtoddle_lo.mp3',
-                        answerId: 3,
-                        correct: false,
-                        wasAnswered: false
-                    },
-                    answers: [{
-                        id: 1,
-                        phrase: '1'
-                    }, {
-                        id: 2,
-                        phrase: '2'
-                    }, {
-                        id: 3,
-                        phrase: '3'
-                    }, {
-                        id: 4,
-                        phrase: '4'
-                    }]
-                }, {
-                    question: {
-                        id: 1,
-                        phrase: '3',
-                        pictureLink: '1',
-                        voiceLink: 'http://www.tonycuffe.com/mp3/tailtoddle_lo.mp3',
-                        answerId: 3,
-                        correct: false,
-                        wasAnswered: false
-                    },
-                    answers: [{
-                        id: 1,
-                        phrase: '1'
-                    }, {
-                        id: 2,
-                        phrase: '2'
-                    }, {
-                        id: 3,
-                        phrase: '3'
-                    }, {
-                        id: 4,
-                        phrase: '4'
-                    }]
-                }]
-            };
-            model.data = data;
-            current = model.data.current;
-            currentQ = model.data.questions[current];
-            return model;
+		  model.data.questions = model.fetch();
+		  for (var i = 0; i < model.data.questions.length; i++) {
+			model.data.questions[i].question.correct = false;
+			model.data.questions[i].question.wasAnswered = false;
+		  }
+		  return model;
         };
 
         model.selectAnswer = function (answer) {
             var current = model.data.current;
             var currentQ = model.data.questions[current];
             currentQ.question.wasAnswered = true;
-            if (currentQ.answerId === answer.id) {
+            if (currentQ.question.answerId === answer.id) {
+                currentQ.question.correct = true;
+            }
+            return currentQ.question.correct;
+        };
+
+        model.showAnswer = function () {
+            var current = model.data.current;
+            var currentQ = model.data.questions[current];
+            currentQ.question.wasAnswered = true;
+        };
+        return model;
+    });
+	$provide.factory('exUaEnModel', function(exModel) {
+        function ExModel () {};
+		exModel.type = 'Translation-Word';
+        ExModel.prototype = exModel;
+        var model = new ExModel();
+
+        model.getData = function () {
+		  model.data.questions = model.fetch();
+		  for (var i = 0; i < model.data.questions.length; i++) {
+			model.data.questions[i].question.correct = false;
+			model.data.questions[i].question.wasAnswered = false;
+		  }
+		  return model;
+        };
+
+        model.selectAnswer = function (answer) {
+            var current = model.data.current;
+            var currentQ = model.data.questions[current];
+            currentQ.question.wasAnswered = true;
+            if (currentQ.question.answerId === answer.id) {
                 currentQ.question.correct = true;
             }
             return currentQ.question.correct;
@@ -158,73 +154,34 @@ angular.module('exercisesApp.Models', []).config(function($provide) {
     });
     $provide.factory('exBuildWordModel', function(exModel) {
         function ExModel () {}
+		exModel.type = 'BuildWord';
         ExModel.prototype = exModel;
         var model = new ExModel();
 
         model.getData = function () {
-            var data = {
-                current: 0,
-                questions: [
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'bo-bo translation',
-                            answer: 'bo-bo',
-                            pictureLink: '1',
-                            voiceLink: 'http://www.tonycuffe.com/mp3/tailtoddle_lo.mp3',
-                            correct: true,
-                            wasMistake: false,
-                            wasAnswered: false
-                        },
-                        symbols: [{val:'b'},{val:'o'},{val:'-'},{val:'b'},{val:'o'}],
-                        currentAnswer: ''
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'bo-bo translation',
-                            answer: 'bo-bo',
-                            pictureLink: '1',
-                            voiceLink: 'http://www.tonycuffe.com/mp3/tailtoddle_lo.mp3',
-                            correct: true,
-                            wasMistake: false,
-                            wasAnswered: false
-                        },
-                        symbols: [{val:'b'},{val:'o'},{val:'-'},{val:'b'},{val:'o'}],
-                        currentAnswer: ''
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'bo-bo translation',
-                            answer: 'bo-bo',
-                            pictureLink: '1',
-                            voiceLink: 'http://www.tonycuffe.com/mp3/tailtoddle_lo.mp3',
-                            correct: true,
-                            wasMistake: false,
-                            wasAnswered: false
-                        },
-                        symbols: [{val:'b'},{val:'o'},{val:'-'},{val:'b'},{val:'o'}],
-                        currentAnswer: ''
-                    }
-                ]
-            };
-            model.data = data;
-            current = model.data.current;
-            currentQ = model.data.questions[current];
+            model.data.questions = model.fetch();
+            for (var i = 0; i < model.data.questions.length; i++) {
+			  model.data.questions[i].question.correct = true;
+			  model.data.questions[i].question.wasAnswered = false;
+			  model.data.questions[i].question.wasMistake = false;
+			  
+			  for (var j = 0; j < model.data.questions[i].symbols.length; j++) {
+				model.data.questions[i].symbols[j] = {val: model.data.questions[i].symbols[j]};
+			  }
+			}
             return model;
         };
 
         model.selectSymbol = function (symbol) {
             var current = model.data.current;
             var currentQ = model.data.questions[current];
-            if (currentQ.question.answer[currentQ.currentAnswer.length] === symbol.val) {
+            if (currentQ.question.phrase[currentQ.currentAnswer.length] === symbol.val) {
                 for (var i = currentQ.symbols.length - 1; i >= 0; i--) {
                     delete currentQ.symbols[i].wrong;
                 }
                 currentQ.currentAnswer += symbol.val;
                 currentQ.symbols.splice(currentQ.symbols.indexOf(symbol), 1);
-                if (currentQ.currentAnswer === currentQ.question.answer) {
+                if (currentQ.currentAnswer === currentQ.question.phrase) {
                     currentQ.question.wasAnswered = true;
                 }
             } else {
@@ -239,7 +196,7 @@ angular.module('exercisesApp.Models', []).config(function($provide) {
             for (var i = currentQ.symbols.length - 1; i >= 0; i--) {
                 currentQ.symbols[i].wrong = true;
             };
-            currentQ.currentAnswer = currentQ.question.answer;
+			currentQ.currentAnswer = currentQ.question.phrase;
             currentQ.question.wasAnswered = true;
             currentQ.question.wasMistake = true;
         };
@@ -260,51 +217,16 @@ angular.module('exercisesApp.Models', []).config(function($provide) {
 
     $provide.factory('exSoundWordModel', function(exModel) {
         function ExModel () {};
+		exModel.type = 'SoundToWord';
         ExModel.prototype = exModel;
         var model = new ExModel();
 
         model.getData = function () {
-            var data = {
-                current: 0,
-                questions: [
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'bo-bo',
-                            pictureLink: '1',
-                            voiceLink: 'http://soundbible.com/grab.php?id=1949&type=mp3',
-                            context: 'bo-bo context',
-                            wasAnswered: false,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'bo-bo',
-                            pictureLink: '1',
-                            voiceLink: 'http://www.tonycuffe.com/mp3/tailtoddle_lo.mp3',
-                            context: 'bo-bo context',
-                            wasAnswered: false,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'bo-bo',
-                            pictureLink: '1',
-                            voiceLink: 'http://soundbible.com/grab.php?id=1949&type=mp3',
-                            context: 'bo-bo context',
-                            wasAnswered: false,
-                            correct: false
-                        }
-                    }
-                ]
-            };
-            model.data = data;
-            current = model.data.current;
-            currentQ = model.data.questions[current];
+            model.data.questions = model.fetch();
+			for (var i = 0; i < model.data.questions.length; i++) {
+			  model.data.questions[i].question.correct = false;
+			  model.data.questions[i].question.wasAnswered = false;
+			}
             return model;
         };
 
@@ -329,127 +251,10 @@ angular.module('exercisesApp.Models', []).config(function($provide) {
     $provide.factory('exTrueFalseModel', function(exModel) {
         function ExModel () {};
         ExModel.prototype = exModel;
-        var model = new ExModel();
+        var model = new ExModel('Sprint');
 
         model.getData = function () {
-            data = {
-                current: 0,
-                remainingTime: 60000,
-                score: 0,
-                deltaScore: 10,
-                correctStack: 0,
-                questions: [
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'sdasd',
-                            answer: false,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'стіdsasdл',
-                            answer: false,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'стіл',
-                            answer: true,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'sdasd',
-                            answer: false,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'стіdsasdл',
-                            answer: false,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'стіл',
-                            answer: true,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'sdasd',
-                            answer: false,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'стіdsasdл',
-                            answer: false,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'стіл',
-                            answer: true,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'sdasd',
-                            answer: false,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'стіdsasdл',
-                            answer: false,
-                            correct: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            textTranslation: 'стіл',
-                            answer: true,
-                            correct: false
-                        }
-                    },
-                ]
-            };
-            model.data = data;
+            model.data = model.fetch();
             current = model.data.current;
             currentQ = model.data.questions[current];
             return model;
@@ -473,106 +278,7 @@ angular.module('exercisesApp.Models', []).config(function($provide) {
         var model = new ExModel();
 
         model.getData = function () {
-            data = {
-                current: 0,
-                remainingTime: 60000,
-                score: 0,
-                deltaScore: 10,
-                correctStack: 0,
-                questions: [
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            translation: 'sdasd',
-                            answered: false,
-                            known: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            translation: 'sdasd',
-                            answered: false,
-                            known: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            translation: 'sdasd',
-                            answered: false,
-                            known: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            translation: 'sdasd',
-                            answered: false,
-                            known: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            translation: 'sdasd',
-                            answered: false,
-                            known: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            translation: 'sdasd',
-                            answered: false,
-                            known: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            translation: 'sdasd',
-                            answered: false,
-                            known: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            translation: 'sdasd',
-                            answered: false,
-                            known: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            translation: 'sdasd',
-                            answered: false,
-                            known: false
-                        }
-                    },
-                    {
-                        question: {
-                            id: 1,
-                            phrase: 'table',
-                            translation: 'sdasd',
-                            answered: false,
-                            known: false
-                        }
-                    },
-                ]
-            };
-            model.data = data;
+            model.data = model.fecth();
             current = model.data.current;
             currentQ = model.data.questions[current];
             return model;

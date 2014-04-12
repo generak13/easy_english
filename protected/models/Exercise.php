@@ -280,7 +280,7 @@ class Exercise extends CActiveRecord
 	public static function processTrainingResults($user, $type, $results) {
 		$mapping = array();
 		$points = 0;
-    
+
     foreach ($results as $elem) {
 			$is_correct = filter_var($elem['correct'], FILTER_VALIDATE_BOOLEAN);
       $mapping[$elem['id']] = $is_correct;

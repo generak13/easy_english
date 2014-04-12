@@ -4,42 +4,42 @@ exercisesApp.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('exList', {
       url: '/exList',
-      templateUrl: 'js/templates/exercises-list-tmpl.html',
+      templateUrl: '/js/templates/exercises-list-tmpl.html',
       controller:  'exListCtrl'
     })
     .state('EN-UA', {
       url: '/EN-UA',
-      templateUrl: 'js/templates/en-ua-tmpl.html',
-      controller:  'exWordTranslateCtrl'
+      templateUrl: '/js/templates/en-ua-tmpl.html',
+      controller:  'exEnUaCtrl'
     })
     .state('UA-EN', {
       url: '/UA-EN',
-      templateUrl: 'js/templates/ua-en-tmpl.html',
-      controller:  'exWordTranslateCtrl'
+      templateUrl: '/js/templates/ua-en-tmpl.html',
+      controller:  'exUaEnCtrl'
     })
     .state('Build-Word', {
       url: '/Build-Word',
-      templateUrl: 'js/templates/build-word-tmpl.html',
+      templateUrl: '/js/templates/build-word-tmpl.html',
       controller:  'exBuildWordCtrl'
     })
     .state('Sound-Word', {
       url: '/Sound-Word',
-      templateUrl: 'js/templates/sound-word-tmpl.html',
+      templateUrl: '/js/templates/sound-word-tmpl.html',
       controller:  'exSoundWordCtrl'
     })
     .state('True-False', {
       url: '/True-False',
-      templateUrl: 'js/templates/true-false-tmpl.html',
+      templateUrl: '/js/templates/true-false-tmpl.html',
       controller:  'exTrueFalseCtrl'
     })
     .state('Do-I-Know', {
       url: '/do-i-know',
-      templateUrl: 'js/templates/do-i-know-tmpl.html',
+      templateUrl: '/js/templates/do-i-know-tmpl.html',
       controller:  'exDoIKnowCtrl'
     })
     .state('results', {
       url: '/results',
-      templateUrl: 'js/templates/results-tmpl.html',
+      templateUrl: '/js/templates/results-tmpl.html',
       controller:  'resultsCtrl'
     })
 }).run(function ($rootScope, $state) {

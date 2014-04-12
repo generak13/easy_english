@@ -8,9 +8,9 @@ angular.module('exercisesApp.Controllers', ['exercisesApp.Models'])
 	        }
 	    }
 	])
-	.controller('exWordTranslateCtrl', ['$scope', '$state', 'exWordTranslateModel', function($scope, $state, exWordTranslateModel) {
-		$scope.model = exWordTranslateModel.getData();
-		$scope.model.data.questions[$scope.model.data.current];
+	.controller('exEnUaCtrl', ['$scope', '$state', 'exEnUaModel', function($scope, $state, exEnUaModel) {
+		$scope.model = exEnUaModel.getData();
+		$scope.model.data.questions[$scope.model.data.current];	
 		$scope.selectedAnswer = null;
 
 		$scope.selectAnswer = function (answer) {
@@ -23,11 +23,33 @@ angular.module('exercisesApp.Controllers', ['exercisesApp.Models'])
 		};
 
 		$scope.next = function () {
-			$scope.model.next();
-			if($scope.model.data.current === $scope.model.data.questions.length) {
+			if($scope.model.data.current === $scope.model.data.questions.length - 1) {
 				$scope.model.generateResults();
 				$state.go('results');
 			}
+			$scope.model.next();
+		};
+	}])
+	.controller('exUaEnCtrl', ['$scope', '$state', 'exUaEnModel', function($scope, $state, exUaEnModel) {
+		$scope.model = exUaEnModel.getData();
+		$scope.model.data.questions[$scope.model.data.current];	
+		$scope.selectedAnswer = null;
+
+		$scope.selectAnswer = function (answer) {
+			$scope.selectedAnswer = answer;
+			$scope.model.selectAnswer(answer);
+		};
+
+		$scope.showAnswer = function () {
+			$scope.model.showAnswer();
+		};
+
+		$scope.next = function () {
+			if($scope.model.data.current === $scope.model.data.questions.length - 1) {
+				$scope.model.generateResults();
+				$state.go('results');
+			}
+			$scope.model.next();
 		};
 	}])
 	.controller('exBuildWordCtrl', ['$scope', '$state', 'exBuildWordModel', function ($scope, $state, exBuildWordModel) {
@@ -45,11 +67,15 @@ angular.module('exercisesApp.Controllers', ['exercisesApp.Models'])
 		};
 
 		$scope.next = function () {
-			$scope.model.next();
-			if($scope.model.data.current === $scope.model.data.questions.length) {
-				$scope.model.generateResults();
-				$state.go('results');
-			}
+		  
+		  if($scope.model.data.current === $scope.model.data.questions.length - 1) {
+			  $scope.model.next();
+			  $scope.model.generateResults();
+			  $state.go('results');
+		  }	else {
+			  $scope.model.next();
+		}
+
 		};
 	}])
 	.controller('exSoundWordCtrl', ['$scope', '$state', 'exSoundWordModel', function ($scope, $state, exSoundWordModel) {
@@ -64,13 +90,13 @@ angular.module('exercisesApp.Controllers', ['exercisesApp.Models'])
 			$scope.model.showAnswer();
 		};
 
-		$scope.next = function () {
-			$scope.currentAnswer = '';
-			$scope.model.next();
-			if($scope.model.data.current === $scope.model.data.questions.length) {
+		$scope.next = function () {		
+			if($scope.model.data.current === $scope.model.data.questions.length - 1) {
 				$scope.model.generateResults();
 				$state.go('results');
 			}
+			$scope.currentAnswer = '';
+			$scope.model.next();
 		};
 	}])
 	.controller('exTrueFalseCtrl', ['$scope', '$state', 'exTrueFalseModel', function ($scope, $state, exTrueFalseModel) {

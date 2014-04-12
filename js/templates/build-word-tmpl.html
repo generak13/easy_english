@@ -1,5 +1,5 @@
 <div id='world-build'>
-	<div class='question'>{{model.data.questions[model.data.current].question.phrase}}</div>
+	<div class='question'>{{model.data.questions[model.data.current].question.translation}}</div>
 	<div class='current-answer'>{{model.data.questions[model.data.current].currentAnswer}}</div>
 	<div class='symbols'>
 		<div class='symbol btn ' ng-repeat='symbol in model.data.questions[model.data.current].symbols' ng-click='selectSymbol(symbol)' ng-class='{ "btn-default": !symbol.wrong, "btn-danger": symbol.wrong, "disabled": model.data.questions[model.data.current].question.wasAnswered }'>{{symbol.val}}</div>

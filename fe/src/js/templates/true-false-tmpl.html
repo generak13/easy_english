@@ -1,8 +1,0 @@
-<h3 class='text-center'>{{model.data.questions[model.data.current].question.phrase}}</h3>
-<h3 class='text-center'>{{model.data.questions[model.data.current].question.textTranslation}}</h3>
-<timer class='text-center' remaining-time='model.data.remainingTime' on-finish='finish()'></timer>
-<div class='text-center'>
-    <button class='btn btn-success' ng-click='checkAnswer(true)'>True</button>
-    <button class='btn btn-danger' ng-click='checkAnswer(false)'>False</button>
-</div>
-<h1 class='text-center'>Score: {{model.data.score}}</h1>
