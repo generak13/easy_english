@@ -254,7 +254,7 @@ class ApiController extends Controller {
 			$user = $this->checkApiKey($api_key);
 			$exercises = Exercise::getExercises();
 			
-			if(!in_array($exercises, $type)) {
+			if(!in_array($type, $exercises)) {
 				$this->error(self::INVALID_DATA);
 			}
 			
