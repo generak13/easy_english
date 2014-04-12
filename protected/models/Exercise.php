@@ -12,6 +12,7 @@
  */
 class Exercise extends CActiveRecord
 {
+	const LIMIT_ROWS = 30;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -101,15 +102,18 @@ class Exercise extends CActiveRecord
 		return $command->queryColumn();
 	}
 	
-	public static function getWordsWordTranslation($user) {
+	public static function getWordsWordTranslation($user, $exercise_id) {
     $words = Exercise2dictionary::model()->with(array(
 			'dictionary' => array(
 				'condition' => 'dictionary.user_id = ' . $user->id
 			)
 		))->findAll(array(
-      'limit' => 10,
-      'order' => 'status DESC, rand()'
+			'condition' => 'exercise_id = ' . $exercise_id,
+      'limit' => self::LIMIT_ROWS,
+      'order' => 'last_learned_date ASC, status ASC'
     ));
+		
+		$words = self::getRandomElements($words, 10);
     
     $all_answers = Dictionary::model()->with('translation')->findAll(array(
       'select' => '*',
@@ -125,9 +129,8 @@ class Exercise extends CActiveRecord
         'phrase' => $word->dictionary->word->text,
         'pictureLink' => $word->dictionary->image_url,
         'context' => $word->dictionary->context,
-        'voiceLink' => '/audio/' . $word->dictionary->word->text . '.mp3',
-        'answerId' => $word->dictionary->translation->id,
-        'correct' => false
+        'voiceLink' => $word->dictionary->word->audio,
+        'answerId' => $word->dictionary->translation->id
       );
       
       $answers = array(array(
@@ -160,15 +163,18 @@ class Exercise extends CActiveRecord
     return $result;
   }
 	
-	public static function getWordsTranslationWord($user) {
+	public static function getWordsTranslationWord($user, $exercise_id) {
     $words = Exercise2dictionary::model()->with(array(
 			'dictionary' => array(
 				'condition' => 'dictionary.user_id = ' . $user->id
 			)
 			))->findAll(array(
-      'limit' => 10,
-      'order' => 'status DESC, rand()'
+			'condition' => 'exercise_id = ' . $exercise_id,
+      'limit' => self::LIMIT_ROWS,
+      'order' => 'last_learned_date ASC, status ASC'
     ));
+		
+		$words = self::getRandomElements($words, 10);
     
     $all_answers = Dictionary::model()->with('word')->findAll(array(
       'select' => '*',
@@ -183,9 +189,8 @@ class Exercise extends CActiveRecord
         'id' => $word->dictionary->id,
         'phrase' => $word->dictionary->translation->text,
         'pictureLink' => $word->dictionary->image_url,
-        'voiceLink' => '/audio/' . $word->dictionary->word->text . '.mp3',
-        'answerId' => $word->dictionary->word->id,
-        'correct' => false
+        'voiceLink' => $word->dictionary->word->audio,
+        'answerId' => $word->dictionary->word->id
       );
       
       $answers = array(array(
@@ -218,7 +223,7 @@ class Exercise extends CActiveRecord
     return $result;
   }
 	
-	public static function getWordsBuildWord($user) {
+	public static function getWordsBuildWord($user, $exercise_id) {
     $result = array();
     
     $words = Exercise2dictionary::model()->with(array(
@@ -226,9 +231,12 @@ class Exercise extends CActiveRecord
 				'condition' => 'dictionary.user_id = ' . $user->id
 			)
 			))->findAll(array(
-      'limit' => 10,
-      'order' => 'status DESC, rand()'
+			'condition' => 'exercise_id = ' . $exercise_id,
+      'limit' => self::LIMIT_ROWS,
+      'order' => 'last_learned_date ASC, status ASC'
     ));
+		
+		$words = self::getRandomElements($words, 10);
     
     foreach ($words as $word) {
       $question = array(
@@ -236,9 +244,8 @@ class Exercise extends CActiveRecord
         'phrase' => $word->dictionary->word->text,
         'translation' => $word->dictionary->translation->text,
         'pictureLink' => $word->dictionary->image_url,
-        'voiceLink' => '/audio/' . $word->dictionary->word->text . '.mp3',
-        'answerId' => $word->dictionary->translation->id,
-        'correct' => false
+        'voiceLink' => $word->dictionary->word->audio,
+        'answerId' => $word->dictionary->translation->id
       );
       
       $symbols = str_split($word->dictionary->word->text);
@@ -250,7 +257,7 @@ class Exercise extends CActiveRecord
     return $result;
   }
 	
-	public static function getWordsSoundToWord($user) {
+	public static function getWordsSoundToWord($user, $exercise_id) {
     $result = array();
     
     $words = Exercise2dictionary::model()->with(array(
@@ -258,17 +265,19 @@ class Exercise extends CActiveRecord
 				'condition' => 'dictionary.user_id = ' . $user->id
 			)
 			))->findAll(array(
-      'limit' => 10,
-      'order' => 'status DESC, rand()'
+			'condition' => 'exercise_id = ' . $exercise_id,
+      'limit' => self::LIMIT_ROWS,
+      'order' => 'last_learned_date ASC, status ASC'
     ));
+		
+		$words = self::getRandomElements($words, 10);
     
     foreach ($words as $word) {
       $question = array(
         'id' => $word->dictionary->id,
         'phrase' => $word->dictionary->word->text,
         'pictureLink' => $word->dictionary->image_url,
-        'voiceLink' => '/audio/' . $word->dictionary->word->text . '.mp3',
-        'correct' => false
+        'voiceLink' => $word->dictionary->word->audio
       );
       
       $result[] = array('question' => $question);
@@ -277,6 +286,98 @@ class Exercise extends CActiveRecord
     return $result;
   }
 	
+	public static function getWordsSprint($user, $exercise_id) {
+		$result = array();
+		
+		$words = Exercise2dictionary::model()->with(array(
+			'dictionary' => array(
+				'condition' => 'dictionary.user_id = ' . $user->id
+			)
+			))->findAll(array(
+			'condition' => 'exercise_id = ' . $exercise_id,
+      'limit' => 50,
+      'order' => 'last_learned_date ASC, status ASC'
+    ));
+		
+		$count = count($words);
+		
+		foreach ($words as $word) {
+			$answer = rand(0, 10) > 5;
+			$translation = $words[rand(0, $count - 1)]->dictionary->translation->text;
+			
+			if($answer || $translation == $word->dictionary->translation->text) {
+				$answer = true;
+				$translation = $word->dictionary->translation->text;
+			}
+			
+      $question = array(
+        'id' => $word->dictionary->id,
+        'phrase' => $word->dictionary->word->text,
+        'translation' => $translation,
+        'pictureLink' => $word->dictionary->image_url,
+        'voiceLink' => $word->dictionary->word->audio,
+				'answer' => $answer
+      );
+      
+      $result[] = array('question' => $question);
+    }
+    
+    return $result;
+	}
+	
+	public static function getWordsDoIKnow($user, $exercise_id) {
+		$result = array();
+		
+		$words = Exercise2dictionary::model()->with(array(
+			'dictionary' => array(
+				'condition' => 'dictionary.user_id = ' . $user->id
+			)
+			))->findAll(array(
+			'condition' => 'exercise_id = ' . $exercise_id,
+      'limit' => self::LIMIT_ROWS,
+      'order' => 'last_learned_date ASC, status ASC'
+    ));
+		
+		$words = self::getRandomElements($words, 10);
+		
+		$count = count($words);
+		
+		foreach ($words as $word) {
+      $question = array(
+        'id' => $word->dictionary->id,
+        'phrase' => $word->dictionary->word->text,
+        'translation' => $word->dictionary->translation->text,
+        'pictureLink' => $word->dictionary->image_url,
+        'voiceLink' => $word->dictionary->word->audio
+      );
+      
+      $result[] = array('question' => $question);
+    }
+    
+    return $result;
+	}
+	
+	private static function getRandomElements($elements, $count) {
+		$result = array();
+		$clones = array();
+		
+		foreach ($elements as $element) {
+			if(in_array($element, $result)) {
+				$result[] = $element;
+			} else {
+				$clones[] = $element;
+			}
+		}
+		
+		if(count($result) < $count) {
+			$result = array_merge($result, array_slice($clones, 0, $count - count($result)));
+		}
+		
+		shuffle($result);
+		
+		return array_slice($result, 0, $count);
+	}
+
 	public static function processTrainingResults($user, $type, $results) {
 		$mapping = array();
 		$points = 0;

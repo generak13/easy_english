@@ -2,7 +2,7 @@
 	<div class='question-voice'>
 		<div class='sound-icon glyphicon glyphicon-volume-up' play-audio='{ audioLink: "{{model.data.questions[model.data.current].question.voiceLink}}", autoplay: true }'></div>
 	</div>
-	<h3 class='text-center' ng-visible='!model.data.questions[model.data.current].question.wasAnswered'>{{model.data.questions[model.data.current].question.phrase}}</h3>
+	<h3 class='text-center' ng-class='{invisible: !model.data.questions[model.data.current].question.wasAnswered}'>{{model.data.questions[model.data.current].question.phrase}}</h3>
 	<div class='form-row' ng-class='{ "has-success": model.data.questions[model.data.current].question.wasAnswered && (model.data.questions[model.data.current].question.wasAnswered === model.data.questions[model.data.current].question.correct), "has-error": model.data.questions[model.data.current].question.wasAnswered && (model.data.questions[model.data.current].question.wasAnswered === !model.data.questions[model.data.current].question.correct) }'>
 		<div class='col-md-offset-3 col-md-5'>
 			<input type='text' class='answer form-control' ng-enter='checkAnswer(currentAnswer)' ng-model='currentAnswer' ng-disabled="model.data.questions[model.data.current].question.wasAnswered" set-focuce='true' />

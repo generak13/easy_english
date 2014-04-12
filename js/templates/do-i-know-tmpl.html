@@ -3,10 +3,10 @@
 		<div class="well">
 			<h3 class="text-center">{{question.question.phrase}}</h3>
 			<h3 class="text-center" ng-class="{invisible: !question.question.answered}">{{question.question.translation}}</h3>
-			<div ng-hide="question.question.answered">
-				<div class="btn btn-success" ng-click="setAnswer(question, true)">Know</div>
-				<div class="btn btn-danger" ng-click="setAnswer(question, false)">Don't know</div>
-				<div class="btn btn-danger" ng-show="question.question.answered" ng-class="{invisible: !question.question.known}"  ng-click="setAnswer(question, false)">Sorry, I don't know</div>
+			<div>
+				<div class="btn btn-success" ng-hide="question.question.answered" ng-click="setAnswer(question, true)">Know</div>
+				<div class="btn btn-danger" ng-hide="question.question.answered" ng-click="setAnswer(question, false)">Don't know</div>
+				<div class="btn btn-danger" ng-show="question.question.answered" ng-class="{invisible: !question.question.correct}" ng-click="setAnswer(question, false)">Sorry, I don't know</div>
 			</div>
 			
 		</div>

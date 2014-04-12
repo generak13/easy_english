@@ -250,13 +250,21 @@ angular.module('exercisesApp.Models', []).config(function($provide) {
     });
     $provide.factory('exTrueFalseModel', function(exModel) {
         function ExModel () {};
+		exModel.type = 'Sprint';
         ExModel.prototype = exModel;
-        var model = new ExModel('Sprint');
+        var model = new ExModel();
 
         model.getData = function () {
-            model.data = model.fetch();
-            current = model.data.current;
-            currentQ = model.data.questions[current];
+            model.data.questions = model.fetch();
+			model.data.remainingTime = 60000;
+			model.data.score = 0;
+			model.data.deltaScore = 10;
+			model.data.correctStack = 0;
+
+			for (var i = 0; i < model.data.questions.length; i++) {
+			  model.data.questions[i].question.correct = false;
+			}
+			
             return model;
         };
 
@@ -274,19 +282,24 @@ angular.module('exercisesApp.Models', []).config(function($provide) {
     });
     $provide.factory('exDoIKnowModel', function(exModel) {
         function ExModel () {};
+		exModel.type = 'DoIKnow';
         ExModel.prototype = exModel;
         var model = new ExModel();
 
         model.getData = function () {
-            model.data = model.fecth();
-            current = model.data.current;
-            currentQ = model.data.questions[current];
+            model.data.questions = model.fetch();
+
+			for (var i = 0; i < model.data.questions.length; i++) {
+			  model.data.questions[i].question.correct = false;
+			  model.data.questions[i].question.answered = false;
+			}
+			
             return model;
         };
 
         model.setAnswer = function (question, val) {
             question.question.answered = true;
-            question.question.known = val;
+            question.question.correct = val;
         };
         return model;
                 

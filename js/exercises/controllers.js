@@ -126,15 +126,17 @@ angular.module('exercisesApp.Controllers', ['exercisesApp.Models'])
 		$scope.model.data.questions[$scope.model.data.current];
 
 		$scope.setAnswer = function (question, val) {
-	        $scope.model.setAnswer(question, val);
+		  $scope.model.setAnswer(question, val);
 		};
 
 		$scope.exit = function () {
-			$state.go('exList');
+		  $scope.model.generateResults();
+		  $state.go('exList');
 		};
 
 		$scope.again = function () {
-			$state.transitionTo($state.current, $stateParams, { reload: true, inherit: false, notify: true });
+		  $scope.model.generateResults();
+		  $state.transitionTo($state.current, $stateParams, { reload: true, inherit: false, notify: true });
 		};
 	}])
 	.controller('resultsCtrl', ['$scope', '$state', 'resultsModel', function ($scope, $state, resultsModel) {
