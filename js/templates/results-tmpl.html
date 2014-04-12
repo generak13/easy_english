@@ -1,0 +1,4 @@
+
+<div ng-repeat='question in model.data'>{{question.phrase}} - {{question.isCorrect}}</div>
+<button class='btn btn-primary repeat-exercise' ng-click="repeatEx()">Repeat</button>
+<button class='btn btn-primary close-exercise' ng-click="goToList()">Close</button>
