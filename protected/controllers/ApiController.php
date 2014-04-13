@@ -219,24 +219,31 @@ class ApiController extends Controller {
 	public function actionGetTraining($api_key, $type) {
 		try {
 			$user = $this->checkApiKey($api_key);
-			$exercises = Exercise::getExercises();
 			
-			if(!in_array($type, $exercises)) {
+			$criteria = new CDbCriteria();
+			$criteria->addCondition('`name` = :name');
+			$criteria->params = array(
+				':name' => $type
+			);
+		
+			$exercise = Exercise::model()->find($criteria);
+			
+			if(!$exercise) {
 				$this->error(self::INVALID_DATA);
 			}
 			
 			switch($type) {
 				case 'Word-Translation':
-					$data = Exercise::getWordsWordTranslation($user);
+					$data = Exercise::getWordsWordTranslation($user, $exercise->id);
 					break;
 				case 'Translation-Word':
-					$data = Exercise::getWordsTranslationWord($user);
+					$data = Exercise::getWordsTranslationWord($user, $exercise->id);
 					break;
 				case 'BuildWord':
-					$data = Exercise::getWordsBuildWord($user);
+					$data = Exercise::getWordsBuildWord($user, $exercise->id);
 					break;
 				case 'SoundToWord':
-					$data = Exercise::getWordsSoundToWord($user);
+					$data = Exercise::getWordsSoundToWord($user, $exercise->id);
 					break;
 				default:
 					throw new Exception();
