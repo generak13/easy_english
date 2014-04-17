@@ -5,7 +5,8 @@ var current_page = 1;
 function bindEvents() {
   var current_word_serach = $('#word_search_textfield').val();
   
-  $('.sound-icon').click(function(event) {
+//  $('.sound-icon').click(function(event) {
+  $('#dictionary_list').on('click', '.sound-icon', function(event) {
     var audio = new Audio();
     audio.src = $(this).data('sound');
     audio.setAttribute('type', 'audio/mp3'); 

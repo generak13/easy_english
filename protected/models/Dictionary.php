@@ -289,8 +289,8 @@ class Dictionary extends CActiveRecord
 		
 		foreach ($translations as $translation) {
 			$result[] = array(
-				'text' => $translation,
-				'image' => TextToImage::getImageUrlByText($translation)
+				'text' => strtolower($translation),
+				'image' => TextToImage::getImageUrlByText(strtolower($text . ' ' .$translation))
 			);
 		}
 		
