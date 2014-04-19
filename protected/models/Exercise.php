@@ -422,7 +422,7 @@ class Exercise extends CActiveRecord
       
       $e2d->status = $status;
       $e2d->save();
-			
+      
 			Statistics::saveUserStatisic($user->id, $points);
     }
 	}

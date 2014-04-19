@@ -16,9 +16,11 @@ class TextToImage {
 		$json = self::get_url_contents('http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' . urlencode($text) . '&safe=active');
 		$data = json_decode($json, true);
 		
-		if(isset($data['responseData']['results']) && isset($data['responseData']['results'])) {
-			return $data['responseData']['results'][0]['url'];
-		}
+    foreach ($data['responseData']['results'] as $elem) {
+      if(strpos($elem['url'], 'demotivators') === false) {
+        return $data['responseData']['results'][0]['url'];
+      }
+    }
 		
 		return '';
 	}
