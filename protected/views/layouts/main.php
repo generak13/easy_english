@@ -56,7 +56,7 @@
 			</div>
 		</header>
 		<div class="container">
-			<div class="well">
+			<div class="well clearfix">
 				<?php echo $content; ?>
 			</div>
 		</div><!-- page -->

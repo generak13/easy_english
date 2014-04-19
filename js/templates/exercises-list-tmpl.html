@@ -1,3 +1,8 @@
-<div ng-repeat='exercise in model.exercises'>
-	<div ng-click='selectExercise(exercise)'>{{exercise.text}}</div>
+<div id='ex-list' class='row'>
+    <div ng-repeat='exercise in model.exercises'>
+        <div class='col-md-4 well' ng-click='selectExercise(exercise)'>
+            <div>{{exercise.text}}</div>
+            <img src='{{exercise.pictureLink}}'>
+        </div>
+    </div>
 </div>

@@ -1,4 +1,11 @@
-
-<div ng-repeat='question in model.data'>{{question.phrase}} - {{question.correct}}</div>
-<button class='btn btn-primary repeat-exercise' ng-click="repeatEx()">Repeat</button>
+<div id='ex-results' class='row'>
+    <div class='col-md-offset-5'>
+        <div class='tr' ng-repeat='question in model.data' ng-class='{"correct": question.correct, "incorrect": !question.correct}'>
+            <div class='td'>{{question.phrase}}</div>
+            <div class='td'> - {{question.correct}}</div>
+        </div>
+    </div>
+</div>    
+<div class='row'>
+<button class='btn btn-primary repeat-exercise col-md-offset-5' ng-click="repeatEx()"><i class='glyphicon glyphicon-refresh'></i> Repeat</button>
 <button class='btn btn-primary close-exercise' ng-click="goToList()">Close</button>

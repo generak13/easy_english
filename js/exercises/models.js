@@ -3,22 +3,28 @@ angular.module('exercisesApp.Models', []).config(function($provide) {
         var m = {
             exercises: [{
                 type: 'EN-UA',
-                text: 'Word Translation EN-UA'
+                text: 'Word Translation EN-UA',
+                pictureLink: '/images/en-ua.png'
             }, {
                 type: 'UA-EN',
-                text: 'Word Translation UA-EN'
+                text: 'Word Translation UA-EN',
+                pictureLink: '/images/ua-en.png'
             }, {
                 type: 'Build-Word',
-                text: 'Build Word'
+                text: 'Build Word',
+                pictureLink: '/images/build.png'
             }, {
                 type: 'Sound-Word',
-                text: 'Sound to Word'
+                text: 'Sound to Word',
+                pictureLink: '/images/sound.png'
             }, {
                 type: 'True-False',
-                text: 'True or False'
+                text: 'True or False',
+                pictureLink: '/images/sprint.png'
             }, {
                 type: 'Do-I-Know',
-                text: 'Do I know?'
+                text: 'Do I know?',
+                pictureLink: '/images/know.png'
             }]
         };
         return m;

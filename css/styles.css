@@ -5755,6 +5755,9 @@ context.highlight-context {
 #exercises {
   padding: 10% 0;
 }
+.question-image img {
+  width: 150px;
+}
 #exercise-word-translation .answer {
   display: block;
   margin-bottom: 15px;
@@ -5861,6 +5864,10 @@ context.highlight-context {
   margin: 0 auto;
   display: block;
 }
+#ex-list img {
+  width: 100%;
+  height: 200px;
+}
 #world-build .question {
   text-align: center;
   font-size: 28px;
@@ -5895,6 +5902,25 @@ context.highlight-context {
 }
 #sound-to-word .check-answer {
   margin-bottom: 20px;
+}
+#ex-results {
+  font-size: 18px;
+}
+#ex-results .correct {
+  color: green;
+}
+#ex-results .incorrect {
+  color: red;
+}
+#ex-results .tr,
+#ex-results .td {
+  padding: 0 10px;
+}
+#ex-results .tr {
+  display: table-row;
+}
+#ex-results .td {
+  display: table-cell;
 }
 a.add-content {
   display: block;
