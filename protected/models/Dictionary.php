@@ -157,8 +157,8 @@ class Dictionary extends CActiveRecord
         $translation->word_id = $word->id;
         $translation->text = $translation_for_word;
         $translation->save();
-      } else if($translation->id == $dictionary->translation_id) {
-				return false;
+      } else if($dictionary && $translation->id == $dictionary->translation_id) {
+        return false;
 			}
     }
     

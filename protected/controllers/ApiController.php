@@ -28,8 +28,8 @@ class ApiController extends Controller {
 	}
 
 	//TODO: validate args
-	public function actionGetContentsList($api_key, $count = 10, $offset = 0, $title = null, $type = null, $genre = null, $lvl = null, $date_sort = 'ASC') {
-		$this->checkApiKey($api_key);
+	public function actionGetContentsList($count = 10, $offset = 0, $title = null, $type = null, $genre = null, $lvl = null, $date_sort = 'ASC') {
+		$this->checkApiKey();
 
 		if ($count < 0 || $count > 20) {
 			$this->error(self::INVALID_DATA);
@@ -88,8 +88,8 @@ class ApiController extends Controller {
 		$this->success($data);
 	}
 	
-	public function actionGetContentData($api_key, $id) {
-		$this->checkApiKey($api_key);
+	public function actionGetContentData($id) {
+		$this->checkApiKey();
 		
 		$criteria = new CDbCriteria();
 		$criteria->addCondition('`id` = :id');
@@ -115,7 +115,16 @@ class ApiController extends Controller {
 		));
 	}
 	
-	public function actionRegisterUser($login, $email, $password) {
+  //post
+	public function actionRegisterUser() {
+    if(!isset($_POST['login']) || !isset($_POST['email']) || !isset($_POST['password'])) {
+      $this->error(self::INVALID_DATA);
+    }
+    
+    $login = $_POST['login'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    
 		try {
 			if(user::isUserExists($login) || user::isUserExists($email)) {
 				$this->error(self::USER_ALREADY_EXISTS);
@@ -140,9 +149,9 @@ class ApiController extends Controller {
 		}
 	}
 	
-	public function actionTranslate($api_key, $text) {
+	public function actionTranslate($text) {
 		try {
-			$this->checkApiKey($api_key);
+			$this->checkApiKey();
 			$translations = Dictionary::getTranslation($text);
 			
 			$this->success(array(
@@ -153,12 +162,13 @@ class ApiController extends Controller {
 		}
 	}
 	
-	public function actionGetUserDetails($api_key) {
+	public function actionGetUserDetails() {
 		try {
+      $user = $this->checkApiKey();
 			$criteria = new CDbCriteria();
 			$criteria->addCondition('`api_key` = :api_key');
 			$criteria->params = array(
-				':api_key' => $api_key
+				':api_key' => $user->api_key
 			);
 			
 			$user = user::model()->find($criteria);
@@ -178,9 +188,9 @@ class ApiController extends Controller {
 		}
 	}
 	
-	public function actionGetUserDictionary($api_key, $text = null, $count = 10, $offset = 0) {
+	public function actionGetUserDictionary($text = null, $count = 10, $offset = 0) {
 		try {
-			$user = $this->checkApiKey($api_key);
+			$user = $this->checkApiKey();
 
 			$limit = $count < 10 ? $count : 10;
 
@@ -193,9 +203,20 @@ class ApiController extends Controller {
 		}
 	}
 	
-	public function actionAddToDictionary($api_key, $eng_text, $translation, $context = null, $content_id = null) {
+  //post
+	public function actionAddToDictionary() {
+    if(!isset($_POST['api_key']) || !isset($_POST['eng_text']) || !isset($_POST['translation'])) {
+      $this->error(self::INVALID_DATA);
+    }
+    
+    $api_key = $_POST['api_key'];
+    $eng_text = $_POST['eng_text'];
+    $translation = $_POST['translation'];
+    $context = isset($_POST['context']) ? $_POST['context'] : null;
+    $content_id = isset($_POST['content_id']) ? $_POST['content_id'] : null;
+    
 		try {
-			$user = $this->checkApiKey($api_key);
+			$user = $this->checkApiKey();
 			
 			Dictionary::addToDictionary($eng_text, $translation, $context, $content_id, $user->id);
 			$this->success(array('eng_text' => $eng_text, 'translation' => $translation, 'context' => $context, 'content_id' => $content_id));
@@ -216,9 +237,9 @@ class ApiController extends Controller {
 		echo phpinfo();
 	}
 	
-	public function actionGetTraining($api_key, $type) {
+	public function actionGetTraining($type) {
 		try {
-			$user = $this->checkApiKey($api_key);
+			$user = $this->checkApiKey();
 			
 			$criteria = new CDbCriteria();
 			$criteria->addCondition('`name` = :name');
@@ -256,9 +277,19 @@ class ApiController extends Controller {
 		}
 	}
 	
-	public function actionProcessResults($api_key, $type, $results) {
+  
+  //post
+	public function actionProcessResults() {
+    if(!isset($_POST['api_key']) || !isset($_POST['type']) || !isset($_POST['results'])) {
+      $this->error(self::INVALID_DATA);
+    }
+    
+    $api_key = $_POST['api_key'];
+    $type = $_POST['type'];
+    $results = $_POST['results'];
+    
 		try {
-			$user = $this->checkApiKey($api_key);
+			$user = $this->checkApiKey();
 			$exercises = Exercise::getExercises();
 			
 			if(!in_array($type, $exercises)) {
@@ -273,7 +304,13 @@ class ApiController extends Controller {
 		}
 	}
 	
-	private function checkApiKey($api_key) {
+	private function checkApiKey() {
+    if(!isset($_GET['api_key']) && !isset($_POST['api_key'])) {
+      $this->error(self::DATA_NOT_FOUND);
+    }
+    
+    $api_key = isset($_GET['api_key']) ? $_GET['api_key'] : $_POST['api_key'];
+
 		$user = user::model()->find("`api_key` = '" . $api_key . "'");
 
 		if (!$user) {

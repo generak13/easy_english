@@ -43,6 +43,10 @@ class ExercisesController extends Controller
 	{
 		$this->render('list');
 	}
+  
+  public function actionPhpInfo() {
+    echo phpinfo();
+  }
 	
   public function actionGetExcerciseList() {
     $data = array('exercises' => array());
